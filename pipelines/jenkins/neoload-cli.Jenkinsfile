@@ -15,7 +15,7 @@ pipeline {
             git(branch: "master", url: 'https://github.com/paulsbruce/neoload-ci-utility.git')
         }
         dir('nl_project') {
-            git(branch: "master", url: 'https://github.com/Neotys-Labs/neoload-cli.git')
+            git(branch: "JenkinsExamples", url: 'https://github.com/Neotys-Labs/neoload-cli.git')
         }
       }
     }
@@ -32,14 +32,13 @@ pipeline {
               script {
                   //sh 'python3 -m pip --no-cache-dir install -i https://pypi.org/simple  --allow-external neoload==0.2'
                   sh "python3 -m pip install -q -e nl_project/"
-                  sh "export PYTHONUNBUFFERED=1"
               }
           }
         }
         stage('Init Profile') {
           steps {
               script {
-                  sh "neoload --debug --profile openshift --token $NLW_TOKEN --zone $NLW_ZONE"
+                  sh "neoload --profile temp --token $NLW_TOKEN --zone $DOCKER_NLW_ZONE"
               }
           }
         }
@@ -48,10 +47,11 @@ pipeline {
               script {
                   sh """\
                      PYTHONUNBUFFERED=1 \
-                     neoload --debug \
-                    -f nl_project/tests/example_2_0_runtime/default.yaml \
-                    -f nl_project/tests/example_2_0_runtime/slas/uat.yaml \
-                    --scenario sanityScenario \
+                     neoload \
+                     --attach docker#2,neotys/neoload-loadgenerator:6.10 \
+                     -f nl_project/tests/example_2_0_runtime/default.yaml \
+                     -f nl_project/tests/example_2_0_runtime/slas/uat.yaml \
+                     --scenario sanityScenario \
                     """
               }
           }
