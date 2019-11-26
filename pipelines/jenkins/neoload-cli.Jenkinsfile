@@ -15,7 +15,7 @@ pipeline {
             git(branch: "master", url: 'https://github.com/paulsbruce/neoload-ci-utility.git')
         }
         dir('nl_project') {
-            git(branch: "JenkinsExamples", url: 'https://github.com/Neotys-Labs/neoload-cli.git')
+            git(branch: "master", url: 'https://github.com/Neotys-Labs/neoload-cli.git')
         }
       }
     }
