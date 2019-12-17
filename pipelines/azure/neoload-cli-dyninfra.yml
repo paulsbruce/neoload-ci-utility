@@ -9,20 +9,19 @@ pool:
   vmImage: 'ubuntu-16.04'
 
 jobs:
+- job: InstallNeoLoadCLI
+  displayName: Install NeoLoad-CLI
+  steps:
+  - bash: |
+      sudo apt-get update && apt-get install py-pip py3-setuptools build-base python2-dev python3-dev
+      sudo python3 -m pip install -q --upgrade pip
+      pip install neoload
+      neoload --version
+
 - job: RunTest
   displayName: Run NeoLoad Test
   continueOnError: true
   steps:
-  - bash: |
-      uname
-      ls -latr /
-      ls -latr $(Build.SourcesDirectory)
-  - bash: |
-      apt-get update
-      apt-get install py-pip py3-setuptools build-base python2-dev python3-dev
-      python3 -m pip install -q --upgrade pip
-      pip install neoload
-      neoload --version
   - bash: |
       cd $(Build.SourcesDirectory)
 
