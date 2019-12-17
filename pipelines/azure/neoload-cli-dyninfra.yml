@@ -51,3 +51,10 @@ jobs:
         echo $ID
         docker logs $ID
 
+- job: HoldContainer
+  displayName: Hold Container
+  dependsOn: AfterTest
+  container: dind_python
+  steps:
+    - bash: |
+        ls -latr
