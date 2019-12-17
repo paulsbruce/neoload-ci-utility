@@ -22,6 +22,7 @@ jobs:
     continueOnError: false
     script: |
       pip install neoload
+      neoload --version
       neoload --profile openshift --token $(nlw_token) --zone $(zone_code)
 
   - bash:
