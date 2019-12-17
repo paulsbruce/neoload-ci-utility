@@ -21,6 +21,7 @@ jobs:
     displayName: Install NeoLoad
     continueOnError: false
     inputs:
+      targetType: inline
       script: |
         pip install neoload
         neoload --version
@@ -30,6 +31,7 @@ jobs:
     displayName: Run NeoLoad Test
     continueOnError: true
     inputs:
+      targetType: inline
       script: |
         cd $(Build.SourcesDirectory)
 
