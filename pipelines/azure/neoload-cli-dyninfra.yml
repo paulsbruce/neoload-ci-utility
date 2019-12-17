@@ -12,7 +12,7 @@ resources:
     image: paulsbruce/dind-python3:1.0
     env: { NEOLOADWEB_TOKEN: $(nlw_token), ZONE: $(zone_code) }
     volumes:
-    - $(wksp):/project
+    - /home/vsts/work/1/s:/project
     - /var/run/docker.sock:/var/run/docker.sock
 
 pool:
