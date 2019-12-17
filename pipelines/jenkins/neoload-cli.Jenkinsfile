@@ -1,10 +1,10 @@
 pipeline {
   agent none
 
-  environment { // either set these in 'prepare...' or get from a secrets provider
+  //environment { // either set these in 'prepare...' or get from a secrets provider
     //NLW_TOKEN = 'YOUR NLWEB TOKEN'
     //NLW_ZONE = 'ZONE ID'
-  }
+  //}
 
   stages {
     stage('Grab Utility Repo') {
@@ -30,8 +30,8 @@ pipeline {
         stage('Get NeoLoad CLI') {
           steps {
               script {
-                  //sh 'python3 -m pip --no-cache-dir install -i https://pypi.org/simple  --allow-external neoload==0.2'
-                  sh "python3 -m pip install -q -e nl_project/"
+                  sh 'python3 -m pip install neoload==0.3.2'
+                  //sh "python3 -m pip install -q -e nl_project/"
               }
           }
         }
@@ -48,11 +48,12 @@ pipeline {
                   sh """\
                      PYTHONUNBUFFERED=1 \
                      neoload \
+                     --scenario sanityScenario \
                      --attach docker#2,neotys/neoload-loadgenerator:6.10 \
                      -f nl_project/tests/example_2_0_runtime/default.yaml \
+                    """/*
                      -f nl_project/tests/example_2_0_runtime/slas/uat.yaml \
-                     --scenario sanityScenario \
-                    """
+                    """*/
               }
           }
         }
