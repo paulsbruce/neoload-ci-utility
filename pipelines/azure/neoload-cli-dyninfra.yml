@@ -4,14 +4,11 @@ trigger:
 variables:
   nlw_token: $(secret_nlw_token)
   zone_code: pimnV
-  wksp: $(Pipeline.Workspace)/s
 
 resources:
   containers:
   - container: dind_python
     image: paulsbruce/dind-python3:1.0
-    volumes:
-    - /home/vsts/work/1/s:/project
 
 pool:
   name: Default
@@ -23,23 +20,23 @@ steps:
 - bash: |
     uname
     ls -latr /
-    ls -latr /project
+    ls -latr $(Build.SourcesDirectory)
 - bash: |
-    pip install neoload
+    cd $(Build.SourcesDirectory)
 
-    mkdir results
+    pip install neoload
 
     neoload --version
 
     neoload --profile openshift --token $(nlw_token) --zone $(zone_code)
 
     neoload --scenario sanityScenario \
-            -f /project/example_test/default.yaml \
-            -f /project/example_test/slas/uat.yaml \
-            --junitsla results/neoload-slas.xml
+            -f example_test/default.yaml \
+            -f example_test/slas/uat.yaml \
+            --junitsla $(Common.TestResultsDirectory)/neoload-slas.xml
 
 - task: PublishTestResults@2
   inputs:
     testResultsFormat: 'JUnit'
-    testResultsFiles: $(wksp)/results/neoload-slas.xml
+    testResultsFiles: $(Common.TestResultsDirectory)/neoload-slas.xml
     failTaskOnFailedTests: true
