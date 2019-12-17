@@ -14,7 +14,9 @@ resources:
     - /home/vsts/work/1/s:/project
 
 pool:
-  vmImage: 'ubuntu-16.04'
+  demands:
+    - agent.os -equals Darwin  # run locally
+#  vmImage: 'ubuntu-16.04'
 
 container: dind_python
 
