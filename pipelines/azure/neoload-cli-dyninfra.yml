@@ -14,29 +14,40 @@ pool:
   name: Default
 #  vmImage: 'ubuntu-16.04'
 
-container: dind_python
+jobs:
+- job: RunTest
+  displayName: Run NeoLoad Test
+  container: dind_python
+  continueOnError: true
+  steps:
+  - bash: |
+      uname
+      ls -latr /
+      ls -latr $(Build.SourcesDirectory)
+  - bash: |
+      cd $(Build.SourcesDirectory)
 
-steps:
-- bash: |
-    uname
-    ls -latr /
-    ls -latr $(Build.SourcesDirectory)
-- bash: |
-    cd $(Build.SourcesDirectory)
+      pip install neoload
 
-    pip install neoload
+      neoload --version
 
-    neoload --version
+      neoload --profile openshift --token $(nlw_token) --zone $(zone_code)
 
-    neoload --profile openshift --token $(nlw_token) --zone $(zone_code)
+      neoload --scenario sanityScenario \
+              -f example_test/default.yaml \
+              -f example_test/slas/uat.yaml \
+              --junitsla $(Common.TestResultsDirectory)/neoload-slas.xml
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: $(Common.TestResultsDirectory)/neoload-slas.xml
+      failTaskOnFailedTests: true
 
-    neoload --scenario sanityScenario \
-            -f example_test/default.yaml \
-            -f example_test/slas/uat.yaml \
-            --junitsla $(Common.TestResultsDirectory)/neoload-slas.xml
+- job: AfterTest
+  displayName: After Test
+  steps:
+    - bash: |
+        containerId = \$\(ps --all --filter since=b89ac00645cb --filter status=running --no-trunc --format "{{.ID}}"\)
+        echo $containerId
+        docker logs $containerId
 
-- task: PublishTestResults@2
-  inputs:
-    testResultsFormat: 'JUnit'
-    testResultsFiles: $(Common.TestResultsDirectory)/neoload-slas.xml
-    failTaskOnFailedTests: true
