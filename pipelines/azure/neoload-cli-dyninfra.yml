@@ -5,19 +5,12 @@ variables:
   nlw_token: $(secret_nlw_token)
   zone_code: pimnV
 
-resources:
-  containers:
-  - container: dind_python
-    image: paulsbruce/dind-python3:1.0.2
-
 pool:
-  name: Default
-#  vmImage: 'ubuntu-16.04'
+  vmImage: 'ubuntu-16.04'
 
 jobs:
 - job: RunTest
   displayName: Run NeoLoad Test
-  container: dind_python
   continueOnError: true
   steps:
   - bash: |
@@ -25,11 +18,13 @@ jobs:
       ls -latr /
       ls -latr $(Build.SourcesDirectory)
   - bash: |
-      cd $(Build.SourcesDirectory)
-
+      apt-get update
+      apt-get install py-pip py3-setuptools build-base python2-dev python3-dev
+      python3 -m pip install -q --upgrade pip
       pip install neoload
-
       neoload --version
+  - bash: |
+      cd $(Build.SourcesDirectory)
 
       neoload --profile openshift --token $(nlw_token) --zone $(zone_code)
 
@@ -42,19 +37,3 @@ jobs:
       testResultsFormat: 'JUnit'
       testResultsFiles: $(Common.TestResultsDirectory)/neoload-slas.xml
       failTaskOnFailedTests: true
-
-- job: AfterTest
-  displayName: After Test
-  steps:
-    - bash: |
-        ID=$(docker ps --all --filter since=b89ac00645cb --filter status=running --no-trunc --format "{{.ID}}")
-        echo $ID
-        docker logs $ID
-
-- job: HoldContainer
-  displayName: Hold Container
-  dependsOn: AfterTest
-  container: dind_python
-  steps:
-    - bash: |
-        ls -latr
