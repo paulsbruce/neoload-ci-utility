@@ -47,7 +47,7 @@ jobs:
   displayName: After Test
   steps:
     - bash: |
-        containerId = \$\(ps --all --filter since=b89ac00645cb --filter status=running --no-trunc --format "{{.ID}}"\)
-        echo $containerId
-        docker logs $containerId
+        ID=$(docker ps --all --filter since=b89ac00645cb --filter status=running --no-trunc --format "{{.ID}}")
+        echo $ID
+        docker logs $ID
 
