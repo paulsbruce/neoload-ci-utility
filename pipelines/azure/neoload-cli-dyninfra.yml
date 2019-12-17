@@ -1,0 +1,46 @@
+trigger:
+  - master
+
+variables:
+  nlw_token: $(secret_nlw_token)
+  zone_code: pimnV
+  wksp: $(Pipeline.Workspace)/s
+
+resources:
+  containers:
+  - container: dind_python
+    image: paulsbruce/dind-python3:1.0
+    env: { NEOLOADWEB_TOKEN: $(nlw_token), ZONE: $(zone_code) }
+    volumes:
+    - $(wksp):/project
+    - /var/run/docker.sock:/var/run/docker.sock
+
+pool:
+  vmImage: 'ubuntu-16.04'
+
+container: dind_python
+
+steps:
+- bash: |
+    uname
+    ls -latr /
+    ls -latr /project
+- bash: |
+    pip install neoload
+
+    mkdir results
+
+    neoload --version
+
+    neoload --profile openshift --token $(nlw_token) --zone $(zone_code)
+
+    neoload --scenario sanityScenario \
+            -f /project/example_test/default.yaml \
+            -f /project/example_test/slas/uat.yaml \
+            --junitsla results/neoload-slas.xml
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: $(wksp)/results/neoload-slas.xml
+    failTaskOnFailedTests: true
