@@ -17,24 +17,26 @@ jobs:
     inputs:
       versionSpec: '3.6'
 
-  - bash:
+  - task: Bash@3
     displayName: Install NeoLoad
     continueOnError: false
-    script: |
-      pip install neoload
-      neoload --version
-      neoload --profile openshift --token $(nlw_token) --zone $(zone_code)
+    inputs:
+      script: |
+        pip install neoload
+        neoload --version
+        neoload --profile openshift --token $(nlw_token) --zone $(zone_code)
 
-  - bash:
+  - task: Bash@3
     displayName: Run NeoLoad Test
     continueOnError: true
-    script: |
-      cd $(Build.SourcesDirectory)
+    inputs:
+      script: |
+        cd $(Build.SourcesDirectory)
 
-      neoload --scenario sanityScenario \
-              -f example_test/default.yaml \
-              -f example_test/slas/uat.yaml \
-              --junitsla $(Common.TestResultsDirectory)/neoload-slas.xml
+        neoload --scenario sanityScenario \
+                -f example_test/default.yaml \
+                -f example_test/slas/uat.yaml \
+                --junitsla $(Common.TestResultsDirectory)/neoload-slas.xml
 
 
   - task: PublishTestResults@2
