@@ -15,17 +15,26 @@ jobs:
   - task: UsePythonVersion@0
     inputs:
       versionSpec: '3.6'
+
   - bash: |
       pip install neoload
+      neoload --profile openshift --token $(nlw_token) --zone $(zone_code)
+    displayName: Install NeoLoad
+    continueOnError: false
+
   - bash: |
       cd $(Build.SourcesDirectory)
-
-      neoload --profile openshift --token $(nlw_token) --zone $(zone_code)
 
       neoload --scenario sanityScenario \
               -f example_test/default.yaml \
               -f example_test/slas/uat.yaml \
               --junitsla $(Common.TestResultsDirectory)/neoload-slas.xml
+
+    displayName: Run NeoLoad Test
+    continueOnError: true
+    env:
+      PYTHONUNBUFFERED: 1
+
   - task: PublishTestResults@2
     inputs:
       testResultsFormat: 'JUnit'
