@@ -15,8 +15,6 @@ resources:
 
 pool:
   name: Default
-  demands:
-    - agent.os -equals Linux  # run locally
 #  vmImage: 'ubuntu-16.04'
 
 container: dind_python
