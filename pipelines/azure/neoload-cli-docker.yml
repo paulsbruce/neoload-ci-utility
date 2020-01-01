@@ -49,8 +49,6 @@ jobs:
       script: |
         cd $(Build.SourcesDirectory)
 
-        sleep 300
-
         neoload --scenario sanityScenario \
                 -f example_test/default.yaml \
                 -f example_test/slas/uat.yaml \
