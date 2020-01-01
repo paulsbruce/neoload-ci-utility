@@ -23,6 +23,9 @@ resources:
 jobs:
 - job: RunLoadTest
   displayName: Run NeoLoad Test
+  services:
+    neoload_ctrl: neoload_ctrl
+    lg1: lg1
   steps:
   - task: UsePythonVersion@0
     inputs:
