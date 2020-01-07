@@ -13,10 +13,10 @@ variables:
 resources:
   containers:
   - container: neoload_ctrl
-    image: paulsbruce/neoload-controller-azure:6.10
+    image: neotys/neoload-controller:7.0.2
     env: { MODE: Managed, NEOLOADWEB_TOKEN: $(nlw_token), ZONE: $(zone_code) }
   - container: lg1
-    image: neotys/neoload-loadgenerator:6.10
+    image: neotys/neoload-loadgenerator:7.0.2
     env: { NEOLOADWEB_TOKEN: $(nlw_token), ZONE: $(zone_code), LG_HOST=lg1, LG_PORT=7101 }
     options: -p 7101:7100
 
