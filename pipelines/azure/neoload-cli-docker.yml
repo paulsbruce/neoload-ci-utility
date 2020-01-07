@@ -18,7 +18,7 @@ resources:
   - container: lg1
     image: neotys/neoload-loadgenerator:7.0.2
     env: { NEOLOADWEB_TOKEN: $(nlw_token), ZONE: $(zone_code), LG_HOST=lg1, LG_PORT=7101 }
-    options: -p 7101:7100
+    options: -p 7101:7101
 
 jobs:
 - job: RunLoadTest
@@ -48,8 +48,6 @@ jobs:
       targetType: 'inline'
       script: |
         cd $(Build.SourcesDirectory)
-
-        docker logs lg1
 
         neoload --scenario sanityScenario \
                 -f example_test/default.yaml \
