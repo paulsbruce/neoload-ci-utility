@@ -17,8 +17,10 @@ resources:
     env: { MODE: Managed, NEOLOADWEB_TOKEN: $(nlw_token), ZONE: $(zone_code) }
   - container: lg1
     image: neotys/neoload-loadgenerator:7.0.2
-    env: { NEOLOADWEB_TOKEN: $(nlw_token), ZONE: $(zone_code), LG_HOST=lg1, LG_PORT=7101 }
-    options: -p 7101:7101
+    env: { NEOLOADWEB_TOKEN: $(nlw_token), ZONE: $(zone_code), LG_HOST=lg1, LG_PORT=7100 }
+  - container: lg2
+    image: neotys/neoload-loadgenerator:7.0.2
+    env: { NEOLOADWEB_TOKEN: $(nlw_token), ZONE: $(zone_code), LG_HOST=lg2, LG_PORT=7100 }
 
 jobs:
 - job: RunLoadTest
