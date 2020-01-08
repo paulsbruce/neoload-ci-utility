@@ -13,13 +13,13 @@ variables:
 resources:
   containers:
   - container: neoload_ctrl
-    image: neotys/neoload-controller:7.0.2
+    image: neotys/neoload-controller:latest
     env: { MODE: Managed, NEOLOADWEB_TOKEN: $(nlw_token), ZONE: $(zone_code) }
   - container: lg1
-    image: neotys/neoload-loadgenerator:7.0.2
+    image: neotys/neoload-loadgenerator:latest
     env: { NEOLOADWEB_TOKEN: $(nlw_token), ZONE: $(zone_code), LG_HOST=lg1, LG_PORT=7100 }
   - container: lg2
-    image: neotys/neoload-loadgenerator:7.0.2
+    image: neotys/neoload-loadgenerator:latest
     env: { NEOLOADWEB_TOKEN: $(nlw_token), ZONE: $(zone_code), LG_HOST=lg2, LG_PORT=7100 }
 
 jobs:
@@ -54,6 +54,7 @@ jobs:
         neoload --scenario sanityScenario \
                 -f example_test/default.yaml \
                 -f example_test/slas/uat.yaml \
+                --attach zone#2
                 --junitsla $(Common.TestResultsDirectory)/neoload-slas.xml
 
 
