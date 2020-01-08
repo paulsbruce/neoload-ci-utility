@@ -28,6 +28,7 @@ jobs:
   services:
     neoload_ctrl: neoload_ctrl
     lg1: lg1
+    lg2: lg2
   steps:
   - task: UsePythonVersion@0
     inputs:
