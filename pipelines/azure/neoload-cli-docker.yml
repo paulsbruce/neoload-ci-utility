@@ -54,7 +54,7 @@ jobs:
         neoload --scenario sanityScenario \
                 -f example_test/default.yaml \
                 -f example_test/slas/uat.yaml \
-                --attach zone#2
+                --attach zone#2 \
                 --junitsla $(Common.TestResultsDirectory)/neoload-slas.xml
 
 
