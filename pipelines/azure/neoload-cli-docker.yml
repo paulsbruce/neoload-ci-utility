@@ -68,7 +68,8 @@ jobs:
       targetType: 'inline'
       script: |
         docker ps
-        docker logs $(docker ps --filter "name=neoload_ctrl")
+        docker ps --filter "name=neoload_ctrl"
+        docker logs $(docker ps --filter "name=neoload_ctrl" --format "{{.ID}}")
 
   - task: PublishTestResults@2
     inputs:
