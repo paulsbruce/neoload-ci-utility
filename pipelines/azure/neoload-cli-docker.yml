@@ -68,11 +68,13 @@ jobs:
       targetType: 'inline'
       script: |
         echo "Controller Docker logs"
-        docker logs $(docker ps --filter "name=neoload_ctrl" --format "{{.ID}}")
+        CTRL_ID=$(docker ps --filter "name=neoload_ctrl" --format "{{.ID}}")
+        docker logs $CTRL_ID
         echo "Controller NeoLoad logs"
-        whoami
-        chown root:root -R /root/.neotys/neoload/v7.1/logs/
-        cat /root/.neotys/neoload/v7.1/logs/neoload.log
+        mkdir $(Common.TestResultsDirectory)/logs
+        docker cp $CTRL_ID:/root/.neotys/neoload/v7.1/logs/ $(Common.TestResultsDirectory)/logs
+        ls -latr $(Common.TestResultsDirectory)/logs
+        cat $(Common.TestResultsDirectory)/logs/neoload.log
 
   - task: PublishTestResults@2
     inputs:
