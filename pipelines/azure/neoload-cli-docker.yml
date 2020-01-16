@@ -67,33 +67,13 @@ jobs:
     inputs:
       targetType: 'inline'
       script: |
-        docker ps
-        docker ps --filter "name=neoload_ctrl"
+        echo "Controller Docker logs"
         docker logs $(docker ps --filter "name=neoload_ctrl" --format "{{.ID}}")
+        echo "Controller NeoLoad logs"
+        cat /root/.neotys/neoload/v7.1/logs/neoload.log
 
   - task: PublishTestResults@2
     inputs:
       testResultsFormat: 'JUnit'
       testResultsFiles: $(Common.TestResultsDirectory)/neoload-slas.xml
       failTaskOnFailedTests: true
-
-
-- job: AfterLoadTest
-  displayName: After Load Test
-  condition: eq(1,2)
-  #dependsOn: RunLoadTest
-  container: neoload_ctrl
-  services:
-    neoload_ctrl: neoload_ctrl
-  steps:
-  - task: Bash@3
-    displayName: Archive Controller Logs
-    continueOnError: true
-    inputs:
-      targetType: 'inline'
-      script: |
-        find / -name "neoload.log"
-        ls -latr /home/
-        ls -latr /home/neoload/
-        cat /home/neoload/.neotys/neoload/v7.1/logs/neoload.log
-
