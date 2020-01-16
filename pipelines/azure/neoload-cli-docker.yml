@@ -16,6 +16,7 @@ resources:
     image: paulsbruce/neoload-controller:7.1-azure 
     #neotys/neoload-controller:latest
     env: { MODE: Managed, NEOLOADWEB_TOKEN: $(nlw_token), ZONE: $(zone_code) }
+    options: --user root
   - container: lg1
     image: neotys/neoload-loadgenerator:latest
     env: { NEOLOADWEB_TOKEN: $(nlw_token), ZONE: $(zone_code), LG_HOST=lg1, LG_PORT=7100 }
