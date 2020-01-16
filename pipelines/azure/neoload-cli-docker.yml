@@ -58,9 +58,27 @@ jobs:
                 --attach zone#2 \
                 --junitsla $(Common.TestResultsDirectory)/neoload-slas.xml
 
-
   - task: PublishTestResults@2
     inputs:
       testResultsFormat: 'JUnit'
       testResultsFiles: $(Common.TestResultsDirectory)/neoload-slas.xml
       failTaskOnFailedTests: true
+
+- job: AfterLoadTest
+  displayName: After Load Test
+  dependsOn: RunLoadTest
+  container: neoload_ctrl
+  services:
+    neoload_ctrl: neoload_ctrl
+  steps:
+  - task: Bash@3
+    displayName: Archive Controller Logs
+    continueOnError: true
+    inputs:
+      targetType: 'inline'
+      script: |
+        ls -latr /home/neoload/
+        ls -latr /home/neoload/.neotys/
+        ls -latr /home/neoload/.neotys/neoload/
+        cat /home/neoload/.neotys/neoload/v7.1/logs/neoload.log
+
