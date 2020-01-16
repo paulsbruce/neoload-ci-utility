@@ -61,15 +61,25 @@ jobs:
                 --attach zone#2 \
                 --junitsla $(Common.TestResultsDirectory)/neoload-slas.xml
 
+  - task: Bash@3
+    displayName: Show Container Logs
+    continueOnError: true
+    inputs:
+      targetType: 'inline'
+      script: |
+        docker logs $(docker ps --filter "name=ctrl")
+
   - task: PublishTestResults@2
     inputs:
       testResultsFormat: 'JUnit'
       testResultsFiles: $(Common.TestResultsDirectory)/neoload-slas.xml
       failTaskOnFailedTests: true
 
+
 - job: AfterLoadTest
   displayName: After Load Test
-  dependsOn: RunLoadTest
+  condition: eq(1,2)
+  #dependsOn: RunLoadTest
   container: neoload_ctrl
   services:
     neoload_ctrl: neoload_ctrl
