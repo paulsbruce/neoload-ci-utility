@@ -26,6 +26,7 @@ resources:
 
 jobs:
 - job: RunLoadTest
+  condition: eq(1,2)
   displayName: Run NeoLoad Test
   services:
     neoload_ctrl: neoload_ctrl
@@ -68,7 +69,7 @@ jobs:
 
 - job: AfterLoadTest
   displayName: After Load Test
-  dependsOn: RunLoadTest
+  #dependsOn: RunLoadTest
   container: neoload_ctrl
   services:
     neoload_ctrl: neoload_ctrl
@@ -79,8 +80,10 @@ jobs:
     inputs:
       targetType: 'inline'
       script: |
-        ls -latr /home/neoload/
-        ls -latr /home/neoload/.neotys/
-        ls -latr /home/neoload/.neotys/neoload/
+        find / -name "neoload.log"
+        ls -latr /home/neoload/neoload/
+        ls -latr /home/root/
+        ls -latr /home/neoload/neoload/.neotys/
+        ls -latr /home/neoload/neoload/.neotys/neoload/
         cat /home/neoload/.neotys/neoload/v7.1/logs/neoload.log
 
