@@ -13,7 +13,8 @@ variables:
 resources:
   containers:
   - container: neoload_ctrl
-    image: neotys/neoload-controller:latest
+    image: paulsbruce/neoload-controller:7.1-azure 
+    #neotys/neoload-controller:latest
     env: { MODE: Managed, NEOLOADWEB_TOKEN: $(nlw_token), ZONE: $(zone_code) }
   - container: lg1
     image: neotys/neoload-loadgenerator:latest
