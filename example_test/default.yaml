@@ -42,3 +42,12 @@ scenarios:
       increment_users: 1
       increment_every: 2s
       duration: 10s
+- name: smokeScenario
+  populations:
+  - name: popGets
+    rampup_load:
+      min_users: 1
+      max_users: 10
+      increment_users: 1
+      increment_every: 2s
+      duration: 3m
