@@ -13,10 +13,8 @@ variables:
 resources:
   containers:
   - container: neoload_ctrl
-    image: paulsbruce/neoload-controller:7.1-azure-b
-    #neotys/neoload-controller:latest
+    image: neotys/neoload-controller:latest
     env: { MODE: Managed, NEOLOADWEB_TOKEN: $(nlw_token), ZONE: $(zone_code) }
-    options: --user root
   - container: lg1
     image: neotys/neoload-loadgenerator:latest
     env: { NEOLOADWEB_TOKEN: $(nlw_token), ZONE: $(zone_code), LG_HOST=lg1, LG_PORT=7100 }
@@ -62,17 +60,14 @@ jobs:
                 --junitsla $(Common.TestResultsDirectory)/neoload-slas.xml
 
   - task: Bash@3
-    displayName: Show Container Logs
+    displayName: Retain Controller Logs
     continueOnError: true
     inputs:
       targetType: 'inline'
       script: |
-        echo "Controller Docker logs"
         CTRL_ID=$(docker ps --filter "name=neoload_ctrl" --format "{{.ID}}")
-        docker logs $CTRL_ID
-        echo "Controller NeoLoad logs"
+        echo "Controller NeoLoad logs: $CTRL_ID"
         docker cp $CTRL_ID:/root/.neotys/neoload/v7.1/logs/ $(Common.TestResultsDirectory)
-        ls -latr $(Common.TestResultsDirectory)/logs
         cat $(Common.TestResultsDirectory)/logs/neoload.log
 
   - task: PublishTestResults@2
