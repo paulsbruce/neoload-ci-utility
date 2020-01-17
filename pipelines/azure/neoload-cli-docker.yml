@@ -66,6 +66,9 @@ jobs:
       targetType: 'inline'
       script: |
         CTRL_ID=$(docker ps --filter "name=neoload_ctrl" --format "{{.ID}}")
+        docker exec -t $CTRL_ID ls -latr /
+        docker exec -t $CTRL_ID ls -latr /home
+        docker exec -t $CTRL_ID ls -latr /home/neoload
         echo "Controller NeoLoad logs: $CTRL_ID"
         docker cp $CTRL_ID:/root/.neotys/neoload/v7.1/logs/ $(Common.TestResultsDirectory)
         cat $(Common.TestResultsDirectory)/logs/neoload.log
