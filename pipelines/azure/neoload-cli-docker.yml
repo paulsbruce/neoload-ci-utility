@@ -56,6 +56,8 @@ jobs:
         neoload --scenario smokeScenario \
                 -f example_test/default.yaml \
                 -f example_test/slas/uat.yaml \
+                --testname "Azure_sidecars_$(Build.BuildNumber)" \
+                --testdesc "Azure example load test with sidecars; $(Build.BuildUri)" \
                 --attach zone#2 \
                 --junitsla $(Common.TestResultsDirectory)/neoload-slas.xml
 
