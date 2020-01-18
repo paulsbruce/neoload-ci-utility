@@ -1,5 +1,4 @@
 trigger: none
-#  - master
 
 pool:
   vmImage: 'ubuntu-16.04'
@@ -24,7 +23,6 @@ resources:
 
 jobs:
 - job: RunLoadTest
-  #condition: eq(1,2)
   displayName: Run NeoLoad Test
   services:
     neoload_ctrl: neoload_ctrl
@@ -42,8 +40,7 @@ jobs:
       targetType: 'inline'
       script: |
         pip install neoload
-        neoload --version
-        neoload --profile docker --token $(nlw_token) --zone $(zone_code)
+        neoload --version --profile docker --token $(nlw_token) --zone $(zone_code)
 
   - task: Bash@3
     displayName: Run NeoLoad Test
@@ -62,13 +59,12 @@ jobs:
                 --junitsla $(Common.TestResultsDirectory)/neoload-slas.xml
 
   - task: Bash@3
-    displayName: Retain Controller Logs
+    displayName: Report Controller Logs
     continueOnError: true
     inputs:
       targetType: 'inline'
       script: |
         CTRL_ID=$(docker ps --filter "name=neoload_ctrl" --format "{{.ID}}")
-        echo "Controller NeoLoad logs: $CTRL_ID"
         docker cp $CTRL_ID:/home/neoload/.neotys/neoload/v7.1/logs/ $(Common.TestResultsDirectory)
         cat $(Common.TestResultsDirectory)/logs/neoload.log
 
