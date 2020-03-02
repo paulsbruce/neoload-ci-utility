@@ -65,7 +65,7 @@ jobs:
       targetType: 'inline'
       script: |
         CTRL_ID=$(docker ps --filter "name=neoload_ctrl" --format "{{.ID}}")
-        docker cp $CTRL_ID:/home/neoload/.neotys/neoload/v7.1/logs/ $(Common.TestResultsDirectory)
+        docker cp $CTRL_ID:/home/neoload/.neotys/neoload/v7.2/logs/ $(Common.TestResultsDirectory)
         cat $(Common.TestResultsDirectory)/logs/neoload.log
 
   - task: PublishTestResults@2
