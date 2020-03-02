@@ -54,7 +54,7 @@ jobs:
         unzip example_test/openstreetmaps_nlp.zip -d neoload_project
         ls -latr neoload_project
 
-        neoload --scenario smokeScenario \
+        neoload --scenario sanityScenario \
                 -f neoload_project/CLI_app_test.nlp \
                 -f example_test/slas/uat.yaml \
                 --testname "Azure_nlp_$(Build.BuildNumber)" \
