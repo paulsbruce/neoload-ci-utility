@@ -41,6 +41,17 @@ jobs:
                 --attach zone#2 \
                 --junitsla $(Common.TestResultsDirectory)/neoload-slas.xml
 
+  - task: Bash@3
+    displayName: Report Controller Logs
+    continueOnError: true
+    inputs:
+      targetType: 'inline'
+      script: |
+        CTRL_ID=$(docker ps --filter "name=neoload_ctrl" --format "{{.ID}}")
+        NL_USER_DIR=/home/neoload/.neotys/neoload
+        NL_VERSION=$(docker exec -t $CTRL_ID find $NL_USER_DIR -maxdepth 1 -type d -name 'v*.*' -exec basename {} ';' | tr -d '\n' | tr -d '\r')
+        docker cp $CTRL_ID:$NL_USER_DIR/$NL_VERSION/logs/ $(Common.TestResultsDirectory)
+        cat $(Common.TestResultsDirectory)/logs/neoload.log
 
   - task: PublishTestResults@2
     inputs:
