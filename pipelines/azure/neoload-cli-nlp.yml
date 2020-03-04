@@ -46,9 +46,7 @@ jobs:
       script: |
         cd $(Build.SourcesDirectory)
 
-        mkdir neoload_project
-        unzip example_test/openstreetmaps_nlp.zip -d neoload_project
-        ls -latr neoload_project
+        mkdir neoload_project && unzip example_test/openstreetmaps_nlp.zip -d neoload_project
 
         neoload --scenario sanityScenario \
                 -f neoload_project/CLI_app_test.nlp \
