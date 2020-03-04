@@ -68,8 +68,11 @@ jobs:
     inputs:
       targetType: 'inline'
       script: |
+        NL_USER_DIR=/home/neoload/.neotys/neoload
         CTRL_ID=$(docker ps --filter "name=neoload_ctrl" --format "{{.ID}}")
-        docker cp $CTRL_ID:/home/neoload/.neotys/neoload/v7.2/logs/ $(Common.TestResultsDirectory)
+        NL_VERSION=$(docker exec -t $CTRL_ID find $NL_USER_DIR -maxdepth 1 -type d -name 'v*.*' -exec basename {} ';')
+        echo $NL_VERSION
+        docker cp $CTRL_ID:$NL_USER_DIR/$NL_VERSION/logs/ $(Common.TestResultsDirectory)
         cat $(Common.TestResultsDirectory)/logs/neoload.log
 
   - task: PublishTestResults@2
