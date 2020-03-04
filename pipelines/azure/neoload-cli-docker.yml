@@ -50,7 +50,7 @@ jobs:
       script: |
         cd $(Build.SourcesDirectory)
 
-        neoload --scenario smokeScenario \
+        neoload --scenario sanityScenario \
                 -f example_test/default.yaml \
                 -f example_test/slas/uat.yaml \
                 --testname "Azure_sidecars_$(Build.BuildNumber)" \
@@ -65,6 +65,7 @@ jobs:
       targetType: 'inline'
       script: |
         NL_USER_DIR=/home/neoload/.neotys/neoload
+        ls -latr $NL_USER_DIR
         CTRL_ID=$(docker ps --filter "name=neoload_ctrl" --format "{{.ID}}")
         NL_VERSION=$(docker exec -t $CTRL_ID find $NL_USER_DIR -maxdepth 1 -type d -name 'v*.*' -exec basename {} ';')
         echo $NL_VERSION
