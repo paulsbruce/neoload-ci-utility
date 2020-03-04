@@ -64,13 +64,9 @@ jobs:
     inputs:
       targetType: 'inline'
       script: |
-        NL_USER_DIR=/home/neoload/.neotys/neoload
         CTRL_ID=$(docker ps --filter "name=neoload_ctrl" --format "{{.ID}}")
-        docker exec -t $CTRL_ID ls -latr $NL_USER_DIR
+        NL_USER_DIR=/home/neoload/.neotys/neoload
         NL_VERSION=$(docker exec -t $CTRL_ID find $NL_USER_DIR -maxdepth 1 -type d -name 'v*.*' -exec basename {} ';' | tr -d '\n' | tr -d '\r')
-        SNL_VERSION=$(echo $NL_VERSION | tr -d '\n' | tr -d '\r')
-        echo $NL_VERSION
-        docker exec -t $CTRL_ID ls -latr $NL_USER_DIR/$NL_VERSION/logs/
         docker cp $CTRL_ID:$NL_USER_DIR/$NL_VERSION/logs/ $(Common.TestResultsDirectory)
         cat $(Common.TestResultsDirectory)/logs/neoload.log
 
