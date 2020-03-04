@@ -67,6 +67,7 @@ jobs:
         NL_USER_DIR=/home/neoload/.neotys/neoload
         CTRL_ID=$(docker ps --filter "name=neoload_ctrl" --format "{{.ID}}")
         docker exec -t $CTRL_ID ls -latr $NL_USER_DIR
+        docker exec -t $CTRL_ID ls -latr /home/neoload/.neotys/neoload/v7.2
         NL_VERSION=$(docker exec -t $CTRL_ID find $NL_USER_DIR -maxdepth 1 -type d -name 'v*.*' -exec basename {} ';')
         NL_VERSION=$(echo $NL_VERSION|tr -d '\n')
         echo $NL_VERSION
