@@ -6,7 +6,7 @@ pool:
 
 variables:
   nlw_token: $(secret_nlw_token)
-  zone_code: pimnV
+  zone_code: rUPY1
   PYTHONUNBUFFERED: 1
 
 jobs:
