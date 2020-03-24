@@ -50,7 +50,7 @@ jobs:
       script: |
         cd $(Build.SourcesDirectory)
 
-        neoload --scenario sanityScenario \
+        neoload --scenario smokeScenario \
                 -f example_test/default.yaml \
                 -f example_test/slas/uat.yaml \
                 --testname "Azure_sidecars_$(Build.BuildNumber)" \
