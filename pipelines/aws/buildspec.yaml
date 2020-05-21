@@ -16,7 +16,7 @@ phases:
   build:
     commands:
       # install the NeoLoad CLI Python client
-      - python3 -m pip install .
+      - sudo -H python3 -m pip install .
       #- pip install neoload
       # create a profile and connect to the platform
       - neoload login --url ${NLW_URL} ${NLW_TOKEN}
