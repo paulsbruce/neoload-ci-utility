@@ -17,8 +17,8 @@ phases:
       - ls -latr
       - export PATH="$HOME/.local/bin:$PATH"
       # install the NeoLoad CLI Python client
-      - python3 -m pip install -q .
-      - ls -latr $HOME/.local/bin
+      - python3 -m pip install .
+      #- ls -latr $HOME/.local/bin
       - which neoload
       #- pip install neoload
   build:
