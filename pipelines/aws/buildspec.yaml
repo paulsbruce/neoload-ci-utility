@@ -19,6 +19,9 @@ phases:
       # install the NeoLoad CLI Python client
       - python3 -m pip install .
       #- ls -latr $HOME/.local/bin
+      - pip list | grep neoload
+      - pip show neoload
+      - ls -latr /root/.cache/pip
       - which neoload
       #- pip install neoload
   build:
