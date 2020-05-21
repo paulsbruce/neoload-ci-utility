@@ -13,11 +13,11 @@ phases:
       # process diags
       - pwd
       - ls -latr
+  build:
+    commands:
       # install the NeoLoad CLI Python client
       - python3 -m pip install .
       #- pip install neoload
-  build:
-    commands:
       # create a profile and connect to the platform
       - neoload login --url ${NLW_URL} ${NLW_TOKEN}
       # configure the test
@@ -29,5 +29,7 @@ phases:
       - neoload fastfail --max-failure 30 slas cur
   post_build:
     commands:
+      # if a prior step failed or err'd, don't bother waiting
+      - bash -c "if [ /"$CODEBUILD_BUILD_SUCCEEDING/" == /"0/" ]; then exit 1; fi"
       # wait for test finalization
       - neoload wait cur
