@@ -3,7 +3,7 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      docker: 18
+      #docker: 18
       python: 3.8
   pre_build:
     commands:
@@ -12,14 +12,17 @@ phases:
       - cd neoload-cli && git checkout topic-fastfail-command && git pull
       - yum install sudo -y
       # process diags
+      - whoami
       - pwd
       - ls -latr
-  build:
-    commands:
+      - export PATH="$HOME/.local/bin:$PATH"
       # install the NeoLoad CLI Python client
-      - sudo python3 -m pip install .
+      - python3 -m pip install -q .
+      - ls -latr $HOME/.local/bin
       - which neoload
       #- pip install neoload
+  build:
+    commands:
       # create a profile and connect to the platform
       - neoload login --url ${NLW_URL} ${NLW_TOKEN}
       # configure the test
@@ -35,3 +38,6 @@ phases:
       - bash -c "if [ /"$CODEBUILD_BUILD_SUCCEEDING/" == /"0/" ]; then exit 1; fi"
       # wait for test finalization
       - neoload wait cur
+artifacts:
+  files:
+    - artifacts.tar.gz
