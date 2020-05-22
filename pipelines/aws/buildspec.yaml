@@ -18,7 +18,8 @@ phases:
       #- ls -latr $HOME/.local/bin
       #- pip list | grep neoload
       - pip show neoload
-      - ls -latr $(pyenv root)/shims
+      #- ls -latr $(pyenv root)/shims
+      - ls -latr /root/.pyenv/versions/3.8.2/bin
       #- which neoload
       #- pip install neoload
   build:
