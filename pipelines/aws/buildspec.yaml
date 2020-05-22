@@ -19,7 +19,7 @@ phases:
       #- pip list | grep neoload
       - pip show neoload
       - ls -latr $(pyenv root)/shims
-      - which neoload
+      #- which neoload
       #- pip install neoload
   build:
     commands:
