@@ -32,7 +32,7 @@ phases:
       # create a profile and connect to the platform
       - neoload login --url ${NLW_URL} ${NLW_TOKEN}
       # configure the test
-      - >
+      - |
         neoload test-settings --zone ${NLW_ZONE} --scenario fullTest createoruse "example-AWScodebuild-SLAfail" \
                 project --path tests/neoload_projects/example_1/ upload \
                 run --detached --web-vu 25 --as-code default.yaml,slas/uat.yaml
