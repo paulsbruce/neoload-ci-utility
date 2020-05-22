@@ -17,6 +17,8 @@ phases:
       - export PATH=$(pyenv root)/shims:${neoload_bin/neoload/}:$PATH
   build:
     commands:
+      - neoload --version
+      - echo $NLW_TOKEN
       # create a profile and connect to the platform
       - neoload login --url ${NLW_URL} ${NLW_TOKEN}
       # configure the test
