@@ -10,17 +10,16 @@ phases:
       # get samples and specific branch of CLI for sla fastfail functionality
       - git clone https://github.com/Neotys-Labs/neoload-cli.git
       - cd neoload-cli && git checkout topic-fastfail-command && git pull
-      - pyenv root
-      - export PATH=$(pyenv root)/shims:$PATH
       # install the NeoLoad CLI Python client
       - python3 -m pip install .
-      - alias neoload='python -m neoload'
+      - export neoload_bin=$(find /System/Library/Frameworks/Python.framework -type f -perm -100 -name neoload)
+      - export PATH=$(pyenv root)/shims:$neoload_bin:$PATH
       #- ls -latr $HOME/.local/bin
       #- pip list | grep neoload
       - pip show neoload
       #- ls -latr $(pyenv root)/shims
       - ls -latr /root/.pyenv/versions/3.8.2/bin
-      #- which neoload
+      - which neoload
       #- pip install neoload
   build:
     commands:
