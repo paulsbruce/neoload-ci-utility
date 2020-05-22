@@ -14,6 +14,7 @@ phases:
       - export PATH=$(pyenv root)/shims:$PATH
       # install the NeoLoad CLI Python client
       - python3 -m pip install .
+      - python -c 'import neoload; print(neoload)'
       #- ls -latr $HOME/.local/bin
       - pip list | grep neoload
       - pip show neoload
