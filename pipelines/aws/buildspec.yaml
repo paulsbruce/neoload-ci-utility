@@ -12,8 +12,8 @@ phases:
       - cd neoload-cli && git checkout topic-fastfail-command && git pull
       # install the NeoLoad CLI Python client
       - python3 -m pip install .
-      - export neoload_bin=$(find /System/Library/Frameworks/Python.framework -type f -perm -100 -name neoload)
-      - export PATH=$(pyenv root)/shims:$neoload_bin:$PATH
+      - export neoload_bin=$(find $(pyenv root) -type f -perm -100 -name neoload)
+      - export PATH=$(pyenv root)/shims:${neoload_bin/neoload/}:$PATH
       #- ls -latr $HOME/.local/bin
       #- pip list | grep neoload
       - pip show neoload
