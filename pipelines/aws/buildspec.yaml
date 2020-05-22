@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   secrets-manager:
-    NLW_TOKEN: NLW_TOKEN:NLW_TOKEN
+    NLW_TOKEN_P: NLW_TOKEN:NLW_TOKEN
 
 phases:
   install:
@@ -11,6 +11,7 @@ phases:
       python: 3.8
   pre_build:
     commands:
+      - printenv
       # get samples and specific branch of CLI for sla fastfail functionality
       - git clone https://github.com/Neotys-Labs/neoload-cli.git
       - cd neoload-cli && git checkout topic-fastfail-command && git pull
@@ -21,10 +22,10 @@ phases:
       - export PATH=$(pyenv root)/shims:${neoload_bin/neoload/}:$PATH
   build:
     commands:
-      - echo $NLW_TOKEN
+      - echo $NLW_TOKEN_P
       - neoload --version
       # create a profile and connect to the platform
-      - neoload login --url ${NLW_URL} ${NLW_TOKEN}
+      - neoload login --url ${NLW_URL} ${NLW_TOKEN_P}
       # configure the test
       - neoload test-settings --zone ${NLW_DYNAMIC_ZONE} --scenario fullTest createoruse "example-AWScodebuild-SLAfail"
       - neoload project --path tests/neoload_projects/example_1/ upload
