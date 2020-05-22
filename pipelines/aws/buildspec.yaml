@@ -11,23 +11,17 @@ phases:
       - git clone https://github.com/Neotys-Labs/neoload-cli.git
       - cd neoload-cli && git checkout topic-fastfail-command && git pull
       # install the NeoLoad CLI Python client
-      - python3 -m pip install .
-      - export neoload_bin=$(find $(pyenv root) -type f -perm -100 -name neoload)
+      - python3 -m pip install -q .
+      # when installing from git source
+      - neoload_bin=$(find $(pyenv root) -type f -perm -100 -name neoload)
       - export PATH=$(pyenv root)/shims:${neoload_bin/neoload/}:$PATH
-      #- ls -latr $HOME/.local/bin
-      #- pip list | grep neoload
-      - pip show neoload
-      #- ls -latr $(pyenv root)/shims
-      - ls -latr /root/.pyenv/versions/3.8.2/bin
-      - which neoload
-      #- pip install neoload
   build:
     commands:
       # create a profile and connect to the platform
       - neoload login --url ${NLW_URL} ${NLW_TOKEN}
       # configure the test
-      - neoload test-settings --zone ${NLW_DYNAMIC_ZONE} --scenario fullTest createoruse "example-AWScodebuild-SLAfail" \
-                project --path tests/neoload_projects/example_1/ upload
+      - neoload test-settings --zone ${NLW_DYNAMIC_ZONE} --scenario fullTest createoruse "example-AWScodebuild-SLAfail"
+      - neoload project --path tests/neoload_projects/example_1/ upload
       # run the test
       - neoload run --detached --web-vu 25 --as-code default.yaml,slas/uat.yaml
       # wait for early failure signals, stop test if any SLA over 30% failed
