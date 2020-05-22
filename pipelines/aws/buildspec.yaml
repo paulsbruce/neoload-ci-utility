@@ -32,6 +32,7 @@ phases:
       # run the test
       - neoload run --detached --web-vu 25 --as-code default.yaml,slas/uat.yaml
       # wait for early failure signals, stop test if any SLA over 30% failed
+      - sleep 5
       - neoload fastfail --max-failure 30 slas cur
   post_build:
     commands:
