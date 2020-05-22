@@ -1,5 +1,9 @@
 version: 0.2
 
+env:
+  secrets-manager:
+    NLW_TOKEN: NLW_TOKEN:NLW_TOKEN
+
 phases:
   install:
     runtime-versions:
@@ -17,8 +21,8 @@ phases:
       - export PATH=$(pyenv root)/shims:${neoload_bin/neoload/}:$PATH
   build:
     commands:
-      - neoload --version
       - echo $NLW_TOKEN
+      - neoload --version
       # create a profile and connect to the platform
       - neoload login --url ${NLW_URL} ${NLW_TOKEN}
       # configure the test
