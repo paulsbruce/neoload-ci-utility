@@ -10,12 +10,7 @@ phases:
       # get samples and specific branch of CLI for sla fastfail functionality
       - git clone https://github.com/Neotys-Labs/neoload-cli.git
       - cd neoload-cli && git checkout topic-fastfail-command && git pull
-      - yum install sudo -y
-      # process diags
-      - whoami
-      - pwd
-      - ls -latr
-      - export PATH="$HOME/.local/bin:$PATH"
+      - pyenv init
       # install the NeoLoad CLI Python client
       - python3 -m pip install .
       #- ls -latr $HOME/.local/bin
