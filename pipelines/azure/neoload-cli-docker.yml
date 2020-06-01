@@ -41,7 +41,7 @@ jobs:
       script: |
         pip install neoload
         neoload --version
-        neoload login ${nlw_token}
+        neoload login $(nlw_token)
 
 
   - task: Bash@3
@@ -52,7 +52,7 @@ jobs:
       script: |
         cd $(Build.SourcesDirectory)
 
-        neoload test-settings --zone ${zone_code} --lgs 2 --scenario smokeScenario patch "Azure_sidecars" \
+        neoload test-settings --zone $(zone_code) --lgs 2 --scenario smokeScenario patch "Azure_sidecars" \
                 project --path example_test/ upload "My Azure Test With CLI"
 
         neoload run \
