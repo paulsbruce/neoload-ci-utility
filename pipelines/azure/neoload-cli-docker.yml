@@ -55,7 +55,7 @@ jobs:
         ls -latr $(Build.SourcesDirectory)
 
         neoload test-settings --zone $(zone_code) --lgs 2 --scenario smokeScenario patch "Azure_sidecars" \
-                project --path $(Build.SourcesDirectory)/example_test/ upload "My Azure Test With CLI"
+                project --path $(Build.SourcesDirectory)/example_test/ upload "Azure_sidecars"
 
         neoload run \
                        --web-vu 25 \
