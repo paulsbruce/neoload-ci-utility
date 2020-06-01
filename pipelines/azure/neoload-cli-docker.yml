@@ -59,10 +59,12 @@ jobs:
 
         neoload run \
                        --web-vu 25 \
-                       --as-code default.yaml,slas/uat.yaml \
+                       --as-code default.yaml \
                        --name "Azure_sidecars_$(Build.BuildNumber)" \
                        --description "Azure example load test with sidecars; $(Build.BuildUri)" \
                        "Azure_sidecars"
+                       
+        #,slas/uat.yaml
 
   - task: Bash@3
     displayName: Get the junit SLA report
