@@ -40,7 +40,7 @@ jobs:
       targetType: 'inline'
       script: |
         pip install neoload
-        neoload --profile docker --token $(nlw_token) --zone $(zone_code)
+        neoload --version
 
   - task: Bash@3
     displayName: Run NeoLoad Test
@@ -50,13 +50,24 @@ jobs:
       script: |
         cd $(Build.SourcesDirectory)
 
-        neoload --scenario smokeScenario \
-                -f example_test/default.yaml \
-                -f example_test/slas/uat.yaml \
-                --testname "Azure_sidecars_$(Build.BuildNumber)" \
-                --testdesc "Azure example load test with sidecars; $(Build.BuildUri)" \
-                --attach zone#2 \
-                --junitsla $(Common.TestResultsDirectory)/neoload-slas.xml
+        neoload login ${nlw_token} \
+                test-settings --zone ${zone_code} --lgs 2 --scenario smokeScenario patch "Azure_sidecars" \
+                project --path example_test/ upload "My Azure Test With CLI"
+
+        neoload run \
+                       --web-vu 25 \
+                       --as-code default.yaml,slas/uat.yaml \
+                       --name "Azure_sidecars_$(Build.BuildNumber)" \
+                       --description "Azure example load test with sidecars; $(Build.BuildUri)" \
+                       "Azure_sidecars"
+
+  - task: Bash@3
+    displayName: Get the junit SLA report
+    continueOnError: true
+    inputs:
+      targetType: 'inline'
+      script: |
+        neoload test-results --junit-file $(Common.TestResultsDirectory)/neoload-slas.xml junitsla
 
   - task: Bash@3
     displayName: Report Controller Logs
