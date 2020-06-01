@@ -50,10 +50,12 @@ jobs:
     inputs:
       targetType: 'inline'
       script: |
-        cd $(Build.SourcesDirectory)
+        pwd
+        ls -latr
+        ls -latr $(Build.SourcesDirectory)
 
-        neoload test-settings --zone $(zone_code) --lgs 2 --scenario smokeScenario create "Azure_sidecars" \
-                project --path example_test/ upload "My Azure Test With CLI"
+        neoload test-settings --zone $(zone_code) --lgs 2 --scenario smokeScenario patch "Azure_sidecars" \
+                project --path $(Build.SourcesDirectory)/example_test/ upload "My Azure Test With CLI"
 
         neoload run \
                        --web-vu 25 \
