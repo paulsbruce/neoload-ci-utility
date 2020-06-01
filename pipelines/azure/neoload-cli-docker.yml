@@ -52,7 +52,7 @@ jobs:
       script: |
         cd $(Build.SourcesDirectory)
 
-        neoload test-settings --zone $(zone_code) --lgs 2 --scenario smokeScenario patch "Azure_sidecars" \
+        neoload test-settings --zone $(zone_code) --lgs 2 --scenario smokeScenario create "Azure_sidecars" \
                 project --path example_test/ upload "My Azure Test With CLI"
 
         neoload run \
