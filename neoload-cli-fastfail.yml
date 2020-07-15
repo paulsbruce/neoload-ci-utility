@@ -40,7 +40,7 @@ jobs:
     inputs:
       targetType: 'inline'
       script: |
-        mkdir neoload-cli && cd neoload-cli && git clone https://github.com/Neotys-Labs/neoload-cli.git && pip install -e .
+        git clone https://github.com/Neotys-Labs/neoload-cli.git && cd neoload-cli && pip install -e .
         cd $(Build.SourcesDirectory)
         neoload --version
         neoload login $(nlw_token)
