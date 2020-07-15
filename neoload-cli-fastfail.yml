@@ -62,6 +62,7 @@ jobs:
                        --name "Azure_sidecars_$(Build.BuildNumber)" \
                        --description "Azure example load test with sidecars; $(Build.BuildUri)" \
                        "Azure_sidecars"
+        sleep 10
                        
   - task: Bash@3
     displayName: Wait for fastfail or finish signals
