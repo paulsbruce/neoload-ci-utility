@@ -57,7 +57,7 @@ jobs:
 
         neoload run \
                        --web-vu 25 \
-                       --detached
+                       --detached \
                        --as-code default.yaml,slas/uat.yaml \
                        --name "Azure_sidecars_$(Build.BuildNumber)" \
                        --description "Azure example load test with sidecars; $(Build.BuildUri)" \
