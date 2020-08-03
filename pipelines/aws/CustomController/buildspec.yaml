@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   variables:
-    NLW_URL: "$ENV_NLW_URL"
+    NLW_URL: $ENV_NLW_URL
   secrets-manager: # as an example from CodeBuild, private token in environment from Secrets Manager
     NLW_TOKEN: NLW_TOKEN
 
