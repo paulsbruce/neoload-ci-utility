@@ -57,7 +57,7 @@ phases:
           -project $PWD/example_test/slas/uat.yaml \
           -launch 'smokeScenario' \
           -testResultName "AWS smoke / Cmd, Build $CODEBUILD_BUILD_NUMBER" \
-          -description "Cloud LGs; Initiator: $CODEBUILD_INITIATOR"
+          -description "Cloud LGs; Initiator: $CODEBUILD_INITIATOR" \
           -report $PWD/neoload-report/report.html,$PWD/neoload-report/report.xml \
           -SLAJUnitResults $PWD/neoload-report/junit-sla-results.xml \
           -noGUI \
