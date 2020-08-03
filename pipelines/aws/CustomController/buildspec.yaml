@@ -29,7 +29,8 @@ phases:
         /home/neoload/neoload/bin/NeoLoadCmd \
           -project $PWD/example_test/default.yaml \
           -project $PWD/example_test/slas/uat.yaml \
-          -launch 'CodeBuild NeoLoadCmd' \
+          -launch 'smokeScenario' \
+          -testResultName 'AWS smoke / Cmd, Build $CODEBUILD_BUILD_NUMBER' \
           -report $PWD/neoload-report/report.html,$PWD/neoload-report/report.xml \
           -SLAJUnitResults $PWD/neoload-report/junit-sla-results.xml \
           -noGUI \
