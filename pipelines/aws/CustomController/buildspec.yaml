@@ -56,7 +56,8 @@ phases:
           -project $PWD/example_test/default.yaml \
           -project $PWD/example_test/slas/uat.yaml \
           -launch 'smokeScenario' \
-          -testResultName 'AWS smoke / Cmd, Build $CODEBUILD_BUILD_NUMBER' \
+          -testResultName "AWS smoke / Cmd, Build $CODEBUILD_BUILD_NUMBER" \
+          -description "Cloud LGs; Initiator: $CODEBUILD_INITIATOR"
           -report $PWD/neoload-report/report.html,$PWD/neoload-report/report.xml \
           -SLAJUnitResults $PWD/neoload-report/junit-sla-results.xml \
           -noGUI \
@@ -77,9 +78,9 @@ phases:
       # if a prior step failed or err'd, don't bother waiting
       - bash -c "if [ /"$CODEBUILD_BUILD_SUCCEEDING/" == /"0/" ]; then exit 1; fi"
 
-#reports:
-  # report-name-or-arn:
-  #   files:
-  #     - $CODEBUILD_SRC_DIR/neoload_slas.junit.xml
-  #   discard-paths: yes
-  #   file-format: JunitXml
+reports:
+  report-name-or-arn:
+    files:
+      - $CODEBUILD_SRC_DIR/neoload-report/junit-sla-results.xml
+    discard-paths: yes
+    file-format: JunitXml
