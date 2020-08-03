@@ -5,10 +5,10 @@ env:
     NLW_URL: $ENV_NLW_URL
   secrets-manager: # as an example from CodeBuild, private token in environment from Secrets Manager
     NLW_TOKEN: NLW_TOKEN
-    NTS_URL: NTS_CREDENTIALS
-    NTS_LICENSE_ID: NTS_CREDENTIALS
-    NTS_USER: NTS_CREDENTIALS
-    NTS_PASS: NTS_CREDENTIALS
+    NTS_URL: NTS_CREDENTIALS:NTS_URL
+    NTS_LICENSE_ID: NTS_CREDENTIALS:NTS_LICENSE_ID
+    NTS_USER: NTS_CREDENTIALS:NTS_USER
+    NTS_PASS: NTS_CREDENTIALS:NTS_PASS
 
 phases:
   install:
