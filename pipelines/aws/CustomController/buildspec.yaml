@@ -1,0 +1,40 @@
+version: 0.2
+
+env:
+  variables:
+    NLW_URL: "$ENV_NLW_URL"
+    NLW_ZONE: "$ENV_NLW_DYNAMIC_ZONE" # or "$ENV_NLW_STATIC_ZONE"
+  secrets-manager: # as an example from CodeBuild, private token in environment from Secrets Manager
+    NLW_TOKEN: ENV_NLW_TOKEN:ENV_NLW_TOKEN
+
+phases:
+  install:
+    runtime-versions:
+      docker: 18
+    commands:
+      - nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 --storage-driver=overlay2&
+      - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
+  pre_build:
+    commands:
+      - pwd
+      - ls -latr
+      - whoami
+
+  build:
+    commands:
+      - ls -latr /home/neoload
+
+  post_build:
+    commands:
+      # produce junit report on SLAs
+      - pwd
+      - ls -latr
+      # if a prior step failed or err'd, don't bother waiting
+      - bash -c "if [ /"$CODEBUILD_BUILD_SUCCEEDING/" == /"0/" ]; then exit 1; fi"
+
+#reports:
+  # report-name-or-arn:
+  #   files:
+  #     - $CODEBUILD_SRC_DIR/neoload_slas.junit.xml
+  #   discard-paths: yes
+  #   file-format: JunitXml
