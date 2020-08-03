@@ -32,16 +32,17 @@ phases:
       - cd $CODEBUILD_SRC_DIR
 
       # sanity check (uses controller node only, checks License credentials, no NLW or NCP)
-      - |
-        /home/neoload/neoload/bin/NeoLoadCmd \
-          -project $PWD/example_test/default.yaml \
-          -launch 'sanityScenario' \
-          -noGUI \
-          -NTS $NTS_URL \
-          -NTSLogin $NTS_USER:$NTS_PASS \
-          -leaseLicense $NTS_LICENSE_ID:25:1
+      # - |
+      #   /home/neoload/neoload/bin/NeoLoadCmd \
+      #     -project $PWD/example_test/default.yaml \
+      #     -launch 'sanityScenario' \
+      #     -noGUI \
+      #     -NTS $NTS_URL \
+      #     -NTSLogin $NTS_USER:$NTS_PASS \
+      #     -leaseLicense $NTS_LICENSE_ID:25:1
 
       - cp $PWD/pipelines/aws/CustomController/infrastructures.yaml $PWD/infra.yaml
+      - ls -latr $PWD
       - sed -i '' "s/\[\[NCP_WORKGROUP_NAME\]\]/$NCP_WORKGROUP_NAME/g" $PWD/infra.yaml
       - sed -i '' "s/\[\[NCP_LG_SIZE\]\]/$NCP_LG_SIZE/g" $PWD/infra.yaml
       - sed -i '' "s/\[\[NCP_HRS_DURATION\]\]/$NCP_HRS_DURATION/g" $PWD/infra.yaml
