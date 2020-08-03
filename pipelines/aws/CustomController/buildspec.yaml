@@ -4,7 +4,11 @@ env:
   variables:
     NLW_URL: $ENV_NLW_URL
   secrets-manager: # as an example from CodeBuild, private token in environment from Secrets Manager
-    NLW_TOKEN: NLW_TOKEN
+    NLW_TOKEN: NLW_TOKEN:NLW_TOKEN
+    NTS_URL: NTS_CREDENTIALS:NTS_URL
+    NTS_LICENSE_ID: NTS_CREDENTIALS:NTS_LICENSE_ID
+    NTS_USER: NTS_CREDENTIALS:NTS_USER
+    NTS_PASS: NTS_CREDENTIALS:NTS_PASS
 
 phases:
   install:
@@ -22,22 +26,19 @@ phases:
       - whoami && pwd
       - ls -latr /home/neoload
 
-      # - |
-      # /home/neoload/neoload/bin/NeoLoadCmd \
-      #     -project /var/lib/jenkins/workspace/load/CPVWeatherCrisis.nlp \
-      #     -project /var/lib/jenkins/workspace/load/neoload/test/cpv-apm/scenario.yaml \
-      #     -launch 'Post Nominal Test' -testResultName 'Load Test (build 8)' \
-      #     -description 'WeatherCrisis Nominal Test' \
-      #     -report /var/lib/jenkins/workspace/load/neoload-report/report.html,/var/lib/jenkins/workspace/load/neoload-report/report.xml \
-      #     -SLAJUnitResults /var/lib/jenkins/workspace/load/neoload-report/junit-sla-results.xml \
-      #     -noGUI \
-      #     -nlweb \
-      #     -L 'API=/var/lib/jenkins/workspace/load/neoload/lg/docker-lg.txt' \
-      #     -L 'Dynatrace=/var/lib/jenkins/workspace/load/neoload/lg/local-lg.txt' \
-      #     -nlwebToken [...] \
-      #     -NTS https://neoload-rest.saas.neotys.com:443/nts \
-      #     -NTSLogin 'user:encpass' \
-      #     -leaseLicense '[...]:51:1'
+      - |
+      /home/neoload/neoload/bin/NeoLoadCmd \
+          -project example_test/default.yaml \
+          -project example_test/slas/uat.yaml \
+          -launch 'CodeBuild NeoLoadCmd' \
+          -report $PWD/neoload-report/report.html,$PWD/neoload-report/report.xml \
+          -SLAJUnitResults $PWD/neoload-report/junit-sla-results.xml \
+          -noGUI \
+          -nlweb \
+          -nlwebToken $NLW_TOKEN \
+          -NTS $NTS_URL \
+          -NTSLogin '$NTS_USER:$NTS_PASS' \
+          -leaseLicense '$NTS_LICENSE_ID:51:1'
 
   post_build:
     commands:
