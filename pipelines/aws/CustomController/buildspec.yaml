@@ -27,7 +27,7 @@ phases:
       - ls -latr /home/neoload
 
       - |
-      /home/neoload/neoload/bin/NeoLoadCmd \
+        /home/neoload/neoload/bin/NeoLoadCmd \
           -project example_test/default.yaml \
           -project example_test/slas/uat.yaml \
           -launch 'CodeBuild NeoLoadCmd' \
