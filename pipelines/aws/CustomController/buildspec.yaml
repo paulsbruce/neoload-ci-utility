@@ -11,20 +11,18 @@ env:
     NTS_PASS: NTS_CREDENTIALS:NTS_PASS
 
 phases:
-  install:
-    commands:
-      - whoami && pwd
-      - printenv
-
-  pre_build:
-    commands:
-      - whoami && pwd
-      - ls -latr
+  # install:
+  #   commands:
+  #     - whoami && pwd
+  #     - printenv
+  #
+  # pre_build:
+  #   commands:
+  #     - whoami && pwd
+  #     - ls -latr
 
   build:
     commands:
-      - whoami && pwd
-      - ls -latr /home/neoload
       - cd $CODEBUILD_SRC_DIR
 
       - |
