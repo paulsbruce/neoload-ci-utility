@@ -40,7 +40,7 @@ jobs:
     inputs:
       targetType: 'inline'
       script: |
-        mkdir neoload-cli && cd neoload-cli && git clone https://github.com/Neotys-Labs/neoload-cli.git && pip install -e .
+        git clone https://github.com/Neotys-Labs/neoload-cli.git && cd neoload-cli && pip install -e .
         cd $(Build.SourcesDirectory)
         neoload --version
         neoload login $(nlw_token)
@@ -57,11 +57,12 @@ jobs:
 
         neoload run \
                        --web-vu 25 \
-                       --detached
+                       --detached \
                        --as-code default.yaml,slas/uat.yaml \
                        --name "Azure_sidecars_$(Build.BuildNumber)" \
                        --description "Azure example load test with sidecars; $(Build.BuildUri)" \
                        "Azure_sidecars"
+        sleep 10
                        
   - task: Bash@3
     displayName: Wait for fastfail or finish signals
