@@ -25,11 +25,12 @@ phases:
     commands:
       - whoami && pwd
       - ls -latr /home/neoload
+      - cd $CODEBUILD_SRC_DIR
 
       - |
         /home/neoload/neoload/bin/NeoLoadCmd \
-          -project example_test/default.yaml \
-          -project example_test/slas/uat.yaml \
+          -project $PWD/example_test/default.yaml \
+          -project $PWD/example_test/slas/uat.yaml \
           -launch 'CodeBuild NeoLoadCmd' \
           -report $PWD/neoload-report/report.html,$PWD/neoload-report/report.xml \
           -SLAJUnitResults $PWD/neoload-report/junit-sla-results.xml \
