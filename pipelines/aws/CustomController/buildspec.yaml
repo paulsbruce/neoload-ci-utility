@@ -4,7 +4,7 @@ env:
   variables:
     NLW_URL: "$ENV_NLW_URL"
   secrets-manager: # as an example from CodeBuild, private token in environment from Secrets Manager
-    NLW_TOKEN: ENV_NLW_TOKEN:ENV_NLW_TOKEN
+    NLW_TOKEN: ENV_NLW_TOKEN
 
 phases:
   install:
@@ -22,6 +22,23 @@ phases:
   build:
     commands:
       - ls -latr /home/neoload
+
+      # - |
+      # /home/neoload/neoload/bin/NeoLoadCmd \
+      #     -project /var/lib/jenkins/workspace/load/CPVWeatherCrisis.nlp \
+      #     -project /var/lib/jenkins/workspace/load/neoload/test/cpv-apm/scenario.yaml \
+      #     -launch 'Post Nominal Test' -testResultName 'Load Test (build 8)' \
+      #     -description 'WeatherCrisis Nominal Test' \
+      #     -report /var/lib/jenkins/workspace/load/neoload-report/report.html,/var/lib/jenkins/workspace/load/neoload-report/report.xml \
+      #     -SLAJUnitResults /var/lib/jenkins/workspace/load/neoload-report/junit-sla-results.xml \
+      #     -noGUI \
+      #     -nlweb \
+      #     -L 'API=/var/lib/jenkins/workspace/load/neoload/lg/docker-lg.txt' \
+      #     -L 'Dynatrace=/var/lib/jenkins/workspace/load/neoload/lg/local-lg.txt' \
+      #     -nlwebToken [...] \
+      #     -NTS https://neoload-rest.saas.neotys.com:443/nts \
+      #     -NTSLogin 'user:encpass' \
+      #     -leaseLicense '[...]:51:1'
 
   post_build:
     commands:
