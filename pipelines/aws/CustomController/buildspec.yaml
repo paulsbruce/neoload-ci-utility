@@ -3,7 +3,6 @@ version: 0.2
 env:
   variables:
     NLW_URL: "$ENV_NLW_URL"
-    NLW_ZONE: "$ENV_NLW_DYNAMIC_ZONE" # or "$ENV_NLW_STATIC_ZONE"
   secrets-manager: # as an example from CodeBuild, private token in environment from Secrets Manager
     NLW_TOKEN: ENV_NLW_TOKEN:ENV_NLW_TOKEN
 
