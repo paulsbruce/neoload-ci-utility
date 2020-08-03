@@ -42,10 +42,10 @@ phases:
       #     -leaseLicense $NTS_LICENSE_ID:25:1
 
       - cp $PWD/pipelines/aws/CustomController/infrastructures.yaml $PWD/infra.yaml
-      - sed -i '' "s/\[\[NCP_WORKGROUP_NAME\]\]/$NCP_WORKGROUP_NAME/g" infra.yaml
-      - sed -i '' "s/\[\[NCP_LG_SIZE\]\]/$NCP_LG_SIZE/g" infra.yaml
-      - sed -i '' "s/\[\[NCP_HRS_DURATION\]\]/$NCP_HRS_DURATION/g" infra.yaml
-      - sed -i '' "s/\[\[NCP_LG_COUNT\]\]/$NCP_LG_COUNT/g" infra.yaml
+      - sed -ie "s/\[\[NCP_WORKGROUP_NAME\]\]/$NCP_WORKGROUP_NAME/g" infra.yaml
+      - sed -ie "s/\[\[NCP_LG_SIZE\]\]/$NCP_LG_SIZE/g" infra.yaml
+      - sed -ie "s/\[\[NCP_HRS_DURATION\]\]/$NCP_HRS_DURATION/g" infra.yaml
+      - sed -ie "s/\[\[NCP_LG_COUNT\]\]/$NCP_LG_COUNT/g" infra.yaml
 
       # smoke test (uses NeoLoad Web and Neotys Cloud Load generators)
       - |
