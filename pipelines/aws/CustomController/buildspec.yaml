@@ -1,5 +1,8 @@
 version: 0.2
 
+# Uses paulsbruce/neoload-controller:aws-codebuild-7.4.0 which is built on
+# Dockerfile in this repo subdirectory (add git to neotys/neoload-controller:7.4.0)
+
 env:
   variables:
     NCP_LG_SIZE: MEDIUM
