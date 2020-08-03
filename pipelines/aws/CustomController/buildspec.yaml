@@ -72,9 +72,6 @@ phases:
 
   post_build:
     commands:
-      # produce junit report on SLAs
-      - pwd
-      - ls -latr
       # if a prior step failed or err'd, don't bother waiting
       - bash -c "if [ /"$CODEBUILD_BUILD_SUCCEEDING/" == /"0/" ]; then exit 1; fi"
 
