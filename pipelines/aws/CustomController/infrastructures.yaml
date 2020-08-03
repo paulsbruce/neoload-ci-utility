@@ -1,0 +1,9 @@
+infrastructures:
+  - name: My Cloud infrastructure
+    type: NEOTYS_CLOUD_LOAD_GENERATOR
+    workgroup: [[NCP_WORKGROUP_NAME]]
+    architecture: [[NCP_LG_SIZE]]
+    duration: [[NCP_HRS_DURATION]]h
+    zones:
+    - id: us-east-1
+      count: [[NCP_LG_COUNT]]
