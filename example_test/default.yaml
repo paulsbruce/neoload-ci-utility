@@ -41,7 +41,7 @@ scenarios:
       max_users: 2
       increment_users: 1
       increment_every: 2s
-      duration: 10s
+      duration: 30s
 - name: smokeScenario
   populations:
   - name: popGets
@@ -50,4 +50,4 @@ scenarios:
       max_users: 10
       increment_users: 1
       increment_every: 2s
-      duration: 3m
+      duration: 5m
