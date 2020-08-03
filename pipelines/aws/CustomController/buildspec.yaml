@@ -37,8 +37,8 @@ phases:
           -nlweb \
           -nlwebToken $NLW_TOKEN \
           -NTS $NTS_URL \
-          -NTSLogin '$NTS_USER:$NTS_PASS' \
-          -leaseLicense '$NTS_LICENSE_ID:51:1'
+          -NTSLogin $NTS_USER:$NTS_PASS \
+          -leaseLicense $NTS_LICENSE_ID:51:1
 
   post_build:
     commands:
