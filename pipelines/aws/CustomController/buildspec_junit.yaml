@@ -38,40 +38,25 @@ phases:
       - |
         /home/neoload/neoload/bin/NeoLoadCmd \
           -project $PWD/example_test/default.yaml \
-          -launch 'sanityScenario' \
-          -noGUI \
-          -NTS $NTS_URL \
-          -NTSLogin $NTS_USER:$NTS_PASS \
-          -leaseLicense $NTS_LICENSE_ID:25:1
-
-      - cp $PWD/pipelines/aws/CustomController/infrastructures.yaml $PWD/infra.yaml
-      - sed -ie "s/\[\[NCP_WORKGROUP_NAME\]\]/$NCP_WORKGROUP_NAME/g" infra.yaml
-      - sed -ie "s/\[\[NCP_LG_SIZE\]\]/$NCP_LG_SIZE/g" infra.yaml
-      - sed -ie "s/\[\[NCP_HRS_DURATION\]\]/$NCP_HRS_DURATION/g" infra.yaml
-      - sed -ie "s/\[\[NCP_LG_COUNT\]\]/$NCP_LG_COUNT/g" infra.yaml
-
-      # smoke test (uses NeoLoad Web and Neotys Cloud Load generators)
-      - |
-        /home/neoload/neoload/bin/NeoLoadCmd \
-          -project $PWD/example_test/default.yaml \
           -project $PWD/example_test/slas/uat.yaml \
-          -launch 'smokeScenario' \
-          -testResultName "AWS smoke / Cmd, Build $CODEBUILD_BUILD_NUMBER" \
-          -description "Cloud LGs; Initiator: $CODEBUILD_INITIATOR" \
+          -launch 'sanityScenario' \
+          -testResultName "AWS sanity / Cmd, Build $CODEBUILD_BUILD_NUMBER" \
+          -description "For jUnit; Initiator: $CODEBUILD_INITIATOR" \
           -report $PWD/neoload-report/report.html,$PWD/neoload-report/report.xml \
           -SLAJUnitResults $PWD/neoload-report/junit-sla-results.xml \
+          -exitCodeFailIgnore \
           -noGUI \
           -nlweb \
           -nlwebAPIURL $NLW_URL \
           -nlwebToken $NLW_TOKEN \
           -NTS $NTS_URL \
           -NTSLogin $NTS_USER:$NTS_PASS \
-          -leaseLicense $NTS_LICENSE_ID:51:1 \
-          -loadGenerators $PWD/infra.yaml \
-          -NCPLogin "$NCP_USER:$NCP_PASS"
+          -leaseLicense $NTS_LICENSE_ID:25:1
+
 
   post_build:
     commands:
+      - cat $CODEBUILD_SRC_DIR/neoload-report/junit-sla-results.xml
       # if a prior step failed or err'd, don't bother waiting
       - bash -c "if [ /"$CODEBUILD_BUILD_SUCCEEDING/" == /"0/" ]; then exit 1; fi"
 
