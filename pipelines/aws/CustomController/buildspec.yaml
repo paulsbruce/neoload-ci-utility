@@ -72,6 +72,7 @@ phases:
 
   post_build:
     commands:
+      - cat $CODEBUILD_SRC_DIR/neoload-report/junit-sla-results.xml
       # if a prior step failed or err'd, don't bother waiting
       - bash -c "if [ /"$CODEBUILD_BUILD_SUCCEEDING/" == /"0/" ]; then exit 1; fi"
 
