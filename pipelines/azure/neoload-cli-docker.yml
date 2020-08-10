@@ -35,14 +35,6 @@ jobs:
       versionSpec: '3.8'
 
   - task: Bash@3
-    displayName: Prepare tooling
-    continueOnError: false
-    inputs:
-      targetType: 'inline'
-      script: |
-        sudo apt-get install jq
-
-  - task: Bash@3
     displayName: Install and Configure NeoLoad
     continueOnError: false
     inputs:
@@ -51,6 +43,25 @@ jobs:
         pip install -q neoload
         neoload --version
         neoload login $(nlw_token)
+
+  - task: Bash@3
+    displayName: Test Temp
+    continueOnError: false
+    inputs:
+      targetType: 'inline'
+      script: |
+        #sudo apt-get install jq
+
+        neoload test-results use e9b286e5-21da-4586-9f29-f69577d24549
+        neoload test-results --junit-file $(Common.TestResultsDirectory)/neoload-slas.xml junitsla
+
+        RESULT_ID=$(neoload test-results ls cur | jq '.id')
+        RESULT_URL=$(neoload logs-url $RESULT_ID)
+        sed -i .bak 's/\<br\/\>/\n/' $(Common.TestResultsDirectory)/neoload-slas.xml
+        sed -i .bak "s/Container\:/Full test results: $RESULT_URL\n\nContainer\:/" $(Common.TestResultsDirectory)/neoload-slas.xml
+        cat $(Common.TestResultsDirectory)/neoload-slas.xml
+
+        exit 5500
 
   - task: Bash@3
     displayName: Configure and Upload Project
