@@ -6,6 +6,7 @@ pool:
 variables:
   nlw_token: $(secret_nlw_token)
   zone_code: 9h2lZ
+  nlw_test_name: Azure_sidecars
   PYTHONUNBUFFERED: 1
 
 # create sidecar containers, attach them to a zone; provide supply this pipeline demands
@@ -31,10 +32,10 @@ jobs:
   steps:
   - task: UsePythonVersion@0
     inputs:
-      versionSpec: '3.6'
+      versionSpec: '3.8'
 
   - task: Bash@3
-    displayName: Install NeoLoad
+    displayName: Install and Configure NeoLoad
     continueOnError: false
     inputs:
       targetType: 'inline'
@@ -43,32 +44,38 @@ jobs:
         neoload --version
         neoload login $(nlw_token)
 
+  - task: Bash@3
+    displayName: Configure and Upload Project
+    continueOnError: false
+    inputs:
+      targetType: 'inline'
+      script: |
+        cd $(Build.SourcesDirectory)
 
+        neoload test-settings --zone $(zone_code) --lgs 2 --scenario sanityScenario patch "$(nlw_test_name)"
+        neoload project --path example_test/ upload cur
+        
   - task: Bash@3
     displayName: Run NeoLoad Test
     continueOnError: true
     inputs:
       targetType: 'inline'
       script: |
-        neoload test-settings --zone $(zone_code) --lgs 2 --scenario smokeScenario patch "Azure_sidecars" \
-                project --path $(Build.SourcesDirectory)/example_test/ upload "Azure_sidecars"
+        cd $(Build.SourcesDirectory)
 
         neoload run \
-                       --web-vu 25 \
-                       --as-code default.yaml \
-                       --name "Azure_sidecars_$(Build.BuildNumber)" \
-                       --description "Azure example load test with sidecars; $(Build.BuildUri)" \
-                       "Azure_sidecars"
-                       
-        #,slas/uat.yaml
-
+                       --web-vu 50 \
+                       --as-code default.yaml, slas/uat.yaml \
+                       --name "AzureBuild_$(Build.BuildNumber)" \
+                       --description "Azure example with meta; $(Build.BuildUri)" \
+                       cur
   - task: Bash@3
     displayName: Get the junit SLA report
     continueOnError: true
     inputs:
       targetType: 'inline'
       script: |
-        neoload test-results --junit-file $(Common.TestResultsDirectory)/neoload-slas.xml junitsla
+       neoload test-results --junit-file $(Common.TestResultsDirectory)/neoload-slas.xml junitsla
 
   - task: Bash@3
     displayName: Report Controller Logs
