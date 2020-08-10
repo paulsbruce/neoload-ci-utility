@@ -84,6 +84,7 @@ jobs:
         echo $NL_VERSION
         docker cp $CTRL_ID:$NL_USER_DIR/$NL_VERSION/logs/ $(Common.TestResultsDirectory)
         ls -latr $(Common.TestResultsDirectory)
+        ls -latr $(Common.TestResultsDirectory)/logs
         cat $(Common.TestResultsDirectory)/logs/neoload.log
 
   - task: PublishTestResults@2
