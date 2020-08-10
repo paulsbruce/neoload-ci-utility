@@ -35,6 +35,14 @@ jobs:
       versionSpec: '3.8'
 
   - task: Bash@3
+    displayName: Prepare tooling
+    continueOnError: false
+    inputs:
+      targetType: 'inline'
+      script: |
+        sudo apt-get install jq
+
+  - task: Bash@3
     displayName: Install and Configure NeoLoad
     continueOnError: false
     inputs:
@@ -76,6 +84,11 @@ jobs:
       targetType: 'inline'
       script: |
        neoload test-results --junit-file $(Common.TestResultsDirectory)/neoload-slas.xml junitsla
+
+       RESULT_ID=$(neoload test-results ls cur | jq '.id')
+       RESULT_URL=$(neoload logs-url $RESULT_ID)
+       sed -i .bak 's/\<br\/\>/\n/' $(Common.TestResultsDirectory)/neoload-slas.xml
+       sed -i .bak "s/Container\:/Full test results: $RESULT_URL\n\nContainer\:/" $(Common.TestResultsDirectory)/neoload-slas.xml
 
   - task: Bash@3
     displayName: Report Controller Logs
