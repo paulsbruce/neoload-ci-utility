@@ -58,8 +58,8 @@ jobs:
         RESULT_ID=$(neoload test-results ls cur | jq --raw-output '.id')
         echo $RESULT_ID
         RESULT_URL=$(neoload logs-url $RESULT_ID)
-        sed -i -e 's/\<br\/\>/\n/' $(Common.TestResultsDirectory)/neoload-slas.xml
-        sed -i =e "s/Container\:/Full test results: $RESULT_URL\n\nContainer\:/" $(Common.TestResultsDirectory)/neoload-slas.xml
+        sed -i -e 's/\&lt\;br\/\&gt\;/\n/' $(Common.TestResultsDirectory)/neoload-slas.xml
+        sed -i -e "s/Container\:/Full test results: $RESULT_URL\n\nContainer\:/" $(Common.TestResultsDirectory)/neoload-slas.xml
         cat $(Common.TestResultsDirectory)/neoload-slas.xml
 
         exit 5500
