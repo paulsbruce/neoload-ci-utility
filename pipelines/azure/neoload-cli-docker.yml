@@ -55,7 +55,7 @@ jobs:
         neoload test-results use d08b697d-a986-466d-bba7-e3d13d700c70
         neoload test-results --junit-file $(Common.TestResultsDirectory)/neoload-slas.xml junitsla
 
-        RESULT_ID=$(neoload test-results ls cur | jq '.id')
+        RESULT_ID=$(neoload test-results ls cur | jq --raw-output '.id')
         echo $RESULT_ID
         RESULT_URL=$(neoload logs-url $RESULT_ID)
         sed -i 's/\<br\/\>/\n/' $(Common.TestResultsDirectory)/neoload-slas.xml
