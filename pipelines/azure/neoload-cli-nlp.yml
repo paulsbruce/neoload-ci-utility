@@ -34,17 +34,19 @@ jobs:
       versionSpec: '3.8'
 
   - task: Bash@3
-    displayName: Install NeoLoad
+    displayName: Install and Configure NeoLoad
     continueOnError: false
     inputs:
       targetType: 'inline'
       script: |
         pip install neoload
         neoload --version
+        neoload login $(nlw_token) \
+                test-settings --zone $(zone_code) --lgs 2 --scenario sanityScenario patch "Azure_sidecars"
 
   - task: Bash@3
-    displayName: Run NeoLoad Test
-    continueOnError: true
+    displayName: Configure and Upload Project
+    continueOnError: false
     inputs:
       targetType: 'inline'
       script: |
@@ -53,10 +55,16 @@ jobs:
         mkdir neoload_project && unzip example_test/openstreetmaps_nlp.zip -d neoload_project
         cp example_test/slas/uat.yaml neoload_project/uat.yaml
 
-        neoload login $(nlw_token) \
-                test-settings --zone $(zone_code) --lgs 2 --scenario sanityScenario patch "Azure_sidecars" \
-                project --path neoload_project/ upload "Azure_sidecars"
+        neoload project --path neoload_project/ upload "Azure_sidecars"
         
+  - task: Bash@3
+    displayName: Run NeoLoad Test
+    continueOnError: true
+    inputs:
+      targetType: 'inline'
+      script: |
+        cd $(Build.SourcesDirectory)
+
         neoload run \
                        --web-vu 50 \
                        --as-code uat.yaml \
