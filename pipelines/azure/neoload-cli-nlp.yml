@@ -54,7 +54,7 @@ jobs:
         cp slas/uat.yaml neoload_project/uat.yaml
 
         neoload login $(nlw_token) \
-                test-settings --zone $(zone_code) --lgs 2 --scenario smokeScenario patch "Azure_sidecars" \
+                test-settings --zone $(zone_code) --lgs 2 --scenario sanityScenario patch "Azure_sidecars" \
                 project --path neoload_project/ upload "Azure_sidecars"
         
         neoload run \
