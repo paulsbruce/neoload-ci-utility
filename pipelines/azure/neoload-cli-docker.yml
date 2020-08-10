@@ -40,7 +40,7 @@ jobs:
     inputs:
       targetType: 'inline'
       script: |
-        pip install neoload
+        pip install -q neoload
         neoload --version
         neoload login $(nlw_token)
 
@@ -52,8 +52,8 @@ jobs:
       script: |
         cd $(Build.SourcesDirectory)
 
-        neoload test-settings --zone $(zone_code) --lgs 2 --scenario sanityScenario patch "$(nlw_test_name)"
-        neoload project --path example_test/ upload cur
+        neoload test-settings --zone $(zone_code) --lgs 2 --scenario sanityScenario patch "$(nlw_test_name)" \
+                project --path example_test/ upload "$(nlw_test_name)"
         
   - task: Bash@3
     displayName: Run NeoLoad Test
@@ -68,7 +68,7 @@ jobs:
                        --as-code default.yaml, slas/uat.yaml \
                        --name "AzureBuild_$(Build.BuildNumber)" \
                        --description "Azure example with meta; $(Build.BuildUri)" \
-                       cur
+                       "$(nlw_test_name)"
   - task: Bash@3
     displayName: Get the junit SLA report
     continueOnError: true
