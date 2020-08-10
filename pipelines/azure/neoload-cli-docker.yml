@@ -25,10 +25,10 @@ resources:
 jobs:
 - job: RunLoadTest
   displayName: Run NeoLoad Test
-  services:
-    neoload_ctrl: neoload_ctrl
-    lg1: lg1
-    lg2: lg2
+  #services:
+  #  neoload_ctrl: neoload_ctrl
+  #  lg1: lg1
+  #  lg2: lg2
   steps:
   - task: UsePythonVersion@0
     inputs:
@@ -57,8 +57,8 @@ jobs:
 
         RESULT_ID=$(neoload test-results ls cur | jq '.id')
         RESULT_URL=$(neoload logs-url $RESULT_ID)
-        sed -i .bak 's/\<br\/\>/\n/' $(Common.TestResultsDirectory)/neoload-slas.xml
-        sed -i .bak "s/Container\:/Full test results: $RESULT_URL\n\nContainer\:/" $(Common.TestResultsDirectory)/neoload-slas.xml
+        sed -i 's/\<br\/\>/\n/' $(Common.TestResultsDirectory)/neoload-slas.xml
+        sed -i "s/Container\:/Full test results: $RESULT_URL\n\nContainer\:/" $(Common.TestResultsDirectory)/neoload-slas.xml
         cat $(Common.TestResultsDirectory)/neoload-slas.xml
 
         exit 5500
