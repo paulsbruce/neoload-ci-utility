@@ -51,7 +51,7 @@ jobs:
         cd $(Build.SourcesDirectory)
 
         mkdir neoload_project && unzip example_test/openstreetmaps_nlp.zip -d neoload_project
-        cp slas/uat.yaml neoload_project/uat.yaml
+        cp example_test/slas/uat.yaml neoload_project/uat.yaml
 
         neoload login $(nlw_token) \
                 test-settings --zone $(zone_code) --lgs 2 --scenario sanityScenario patch "Azure_sidecars" \
