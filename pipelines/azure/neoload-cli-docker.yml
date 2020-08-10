@@ -25,10 +25,10 @@ resources:
 jobs:
 - job: RunLoadTest
   displayName: Run NeoLoad Test
-  #services:
-  #  neoload_ctrl: neoload_ctrl
-  #  lg1: lg1
-  #  lg2: lg2
+  services:
+    neoload_ctrl: neoload_ctrl
+    lg1: lg1
+    lg2: lg2
   steps:
   - task: UsePythonVersion@0
     inputs:
@@ -43,27 +43,6 @@ jobs:
         pip install -q neoload
         neoload --version
         neoload login $(nlw_token)
-
-  - task: Bash@3
-    displayName: Test Temp
-    continueOnError: false
-    inputs:
-      targetType: 'inline'
-      script: |
-        #sudo apt-get install jq
-
-        neoload test-results use d08b697d-a986-466d-bba7-e3d13d700c70
-        neoload test-results --junit-file $(Common.TestResultsDirectory)/neoload-slas.xml junitsla
-
-        RESULT_ID=$(neoload test-results ls cur | jq --raw-output '.id')
-        echo $RESULT_ID
-        RESULT_URL=$(neoload logs-url $RESULT_ID)
-        sed -i -e $'s/\&lt\;br\/\&gt\;/\\\n/g' $(Common.TestResultsDirectory)/neoload-slas.xml
-        sed -i -e $'s/\>Container\:/\>Full test results\: _RESULT_URL_\\\n\\\nContainer\:/g' $(Common.TestResultsDirectory)/neoload-slas.xml
-        sed -i -e "s|_RESULT_URL_|$RESULT_URL|g" $(Common.TestResultsDirectory)/neoload-slas.xml
-        cat $(Common.TestResultsDirectory)/neoload-slas.xml
-
-        exit 5500
 
   - task: Bash@3
     displayName: Configure and Upload Project
@@ -96,12 +75,17 @@ jobs:
     inputs:
       targetType: 'inline'
       script: |
-       neoload test-results --junit-file $(Common.TestResultsDirectory)/neoload-slas.xml junitsla
+        neoload test-results --junit-file $(Common.TestResultsDirectory)/neoload-slas.xml junitsla
 
-       RESULT_ID=$(neoload test-results ls cur | jq '.id')
-       RESULT_URL=$(neoload logs-url $RESULT_ID)
-       sed -i .bak 's/\<br\/\>/\n/' $(Common.TestResultsDirectory)/neoload-slas.xml
-       sed -i .bak "s/Container\:/Full test results: $RESULT_URL\n\nContainer\:/" $(Common.TestResultsDirectory)/neoload-slas.xml
+        #sudo apt-get install jq #jq already installed on ubuntu build agent
+
+        # change <br/> to newlines for Azure output, also insert the NeoLoad report url in each SLA failure
+        RESULT_ID=$(neoload test-results ls cur | jq --raw-output '.id')
+        RESULT_URL=$(neoload logs-url $RESULT_ID)
+        sed -i -e $'s/\&lt\;br\/\&gt\;/\\\n/g' $(Common.TestResultsDirectory)/neoload-slas.xml
+        sed -i -e $'s/\>Container\:/\>Full test results\: _RESULT_URL_\\\n\\\nContainer\:/g' $(Common.TestResultsDirectory)/neoload-slas.xml
+        sed -i -e "s|_RESULT_URL_|$RESULT_URL|g" $(Common.TestResultsDirectory)/neoload-slas.xml
+        cat $(Common.TestResultsDirectory)/neoload-slas.xml
 
   - task: Bash@3
     displayName: Report Controller Logs
