@@ -41,7 +41,7 @@ jobs:
     inputs:
       targetType: 'inline'
       script: |
-        pip install -q neoload==1.1.0rc2
+        pip install -q neoload==1.1.0
         neoload --version
         neoload login --workspace "$(workspace)" $(nlw_token)
 
