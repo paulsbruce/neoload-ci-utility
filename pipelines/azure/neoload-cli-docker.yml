@@ -8,6 +8,7 @@ variables:
   zone_code: 9h2lZ
   workspace: Team A
   nlw_test_name: Azure_sidecars
+  MAX_SLA_FAILURE_PERCENT: 25
   PYTHONUNBUFFERED: 1
 
 # create sidecar containers, attach them to a zone; provide supply this pipeline demands
@@ -65,11 +66,14 @@ jobs:
         cd $(Build.SourcesDirectory)
 
         neoload run \
+                       --detached
                        --web-vu 50 \
                        --as-code default.yaml,slas/uat.yaml \
                        --name "AzureBuild_$(Build.BuildNumber)" \
                        --description "Azure example with meta; $(Build.BuildUri)" \
                        "$(nlw_test_name)"
+        
+        neoload fastfail --max-failure $(MAX_SLA_FAILURE_PERCENT) slas cur
   - task: Bash@3
     displayName: Get the junit SLA report
     continueOnError: true
