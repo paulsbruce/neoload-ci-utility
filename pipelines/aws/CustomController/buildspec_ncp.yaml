@@ -80,6 +80,6 @@ phases:
 reports:
   report-name-or-arn:
     files:
-      - $CODEBUILD_SRC_DIR/neoload-report/junit-sla-results.xml
+      - neoload-report/junit-sla-results.xml
     discard-paths: yes
     file-format: JunitXml
