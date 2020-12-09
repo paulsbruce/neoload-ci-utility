@@ -1,7 +1,8 @@
 trigger: none
 
 pool:
-  vmImage: 'ubuntu-16.04'
+  vmImage: 'windows-latest'
+  #'ubuntu-16.04'
 
 variables:
   nlw_url: $(secret_nlw_url)
