@@ -27,7 +27,7 @@ jobs:
         pip install neoload
         neoload --version
         neoload login --url $(nlw_url) --workspace Demo $(nlw_token) \
-                test-settings --zone $(zone_code) --lgs 1 --scenario sanityScenario createorpatch "Azure Sample"
+                test-settings --zone $(zone_code) --lgs 1 --scenario sanityScenario createorpatch "Azure Sample" \
                 project --path $(Build.SourcesDirectory)/example_test/ upload cur
 
   - task: Bash@3
