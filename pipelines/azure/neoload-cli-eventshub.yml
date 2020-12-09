@@ -27,16 +27,7 @@ jobs:
         neoload --version
         neoload login --url $(nlw_url) --workspace Demo $(nlw_token) \
                 test-settings --zone $(zone_code) --lgs 1 --scenario sanityScenario createorpatch "Azure Sample"
-
-  - task: Bash@3
-    displayName: Configure and Upload Project
-    continueOnError: false
-    inputs:
-      targetType: 'inline'
-      script: |
-        cd $(Build.SourcesDirectory)
-
-        neoload project --path $(Build.SourcesDirectory)/example_test/ upload cur
+                project --path $(Build.SourcesDirectory)/example_test/ upload cur
 
   - task: Bash@3
     displayName: Run NeoLoad Test
@@ -44,8 +35,6 @@ jobs:
     inputs:
       targetType: 'inline'
       script: |
-        cd $(Build.SourcesDirectory)
-
         neoload run \
                        --web-vu 25 \
                        --detached \
@@ -61,8 +50,10 @@ jobs:
       script: |
        whoami
        ls -latr $(Common.TestResultsDirectory)
-       
+
        neoload test-results --junit-file $(Common.TestResultsDirectory)/neoload-slas.xml junitsla
+
+       ls -latr $(Common.TestResultsDirectory)
 
   - task: PublishTestResults@2
     inputs:
