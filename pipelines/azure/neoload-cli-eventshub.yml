@@ -24,7 +24,7 @@ jobs:
     inputs:
       targetType: 'inline'
       script: |
-        pip install --quiet neoload
+        pip install neoload
         neoload --version
         cd $(Build.SourcesDirectory)
         neoload login --url $(nlw_url) --workspace Demo $(nlw_token) \
@@ -39,7 +39,6 @@ jobs:
       script: |
         neoload run \
                        --web-vu 25 \
-                       --detached \
                        --as-code default.yaml,slas/uat.yaml \
                        --name "Azure_sidecars_$(Build.BuildNumber)" \
                        --description "Azure example load test with sidecars; $(Build.BuildUri)" \
