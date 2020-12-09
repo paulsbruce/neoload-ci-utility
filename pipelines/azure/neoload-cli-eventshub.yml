@@ -1,0 +1,88 @@
+trigger: none
+
+pool:
+  vmImage: 'ubuntu-16.04'
+
+variables:
+  nlw_url: $(secret_nlw_url)
+  nlw_token: $(secret_nlw_token)
+  zone_code: wNBKe
+  PYTHONUNBUFFERED: 1
+
+jobs:
+- job: RunLoadTest
+  displayName: Run NeoLoad Test
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.8'
+
+  - task: Bash@3
+    displayName: Install and Configure NeoLoad
+    continueOnError: false
+    inputs:
+      targetType: 'inline'
+      script: |
+        pip install neoload
+        neoload --version
+        neoload login --url $(nlw_url) $(nlw_token) \
+                test-settings --zone $(zone_code) --lgs 1 --scenario sanityScenario createorpatch "Azure Sample"
+
+  - task: Bash@3
+    displayName: Configure and Upload Project
+    continueOnError: false
+    inputs:
+      targetType: 'inline'
+      script: |
+        cd $(Build.SourcesDirectory)
+
+        mkdir neoload_project && unzip example_test/openstreetmaps_nlp.zip -d neoload_project
+        cp example_test/slas/uat.yaml neoload_project/uat.yaml
+
+        neoload project --path neoload_project/ upload cur
+
+  - task: Bash@3
+    displayName: Run NeoLoad Test
+    continueOnError: true
+    inputs:
+      targetType: 'inline'
+      script: |
+        cd $(Build.SourcesDirectory)
+
+        neoload run \
+                       --web-vu 50 \
+                       --as-code uat.yaml \
+                       --name "TestLaunchedFromAzureCI_build_$(Build.BuildNumber)" \
+                       --description "Azure example with meta; $(Build.BuildUri)" \
+                       cur
+  - task: Bash@3
+    displayName: Get the junit SLA report
+    continueOnError: true
+    inputs:
+      targetType: 'inline'
+      script: |
+       whoami
+       ls -latr $(Common.TestResultsDirectory)
+       neoload test-results --junit-file $(Common.TestResultsDirectory)/neoload-slas.xml junitsla
+
+  - task: Bash@3
+    displayName: Report Controller Logs
+    continueOnError: true
+    inputs:
+      targetType: 'inline'
+      script: |
+        CTRL_ID=$(docker ps --filter "name=neoload_ctrl" --format "{{.ID}}")
+        echo $CTRL_ID
+        NL_USER_DIR=/home/neoload/.neotys/neoload
+        NL_VERSION=$(docker exec -t $CTRL_ID find $NL_USER_DIR -maxdepth 1 -type d -name 'v*.*' -exec basename {} ';' | tr -d '\n' | tr -d '\r')
+        echo $NL_VERSION
+        docker cp $CTRL_ID:$NL_USER_DIR/$NL_VERSION/logs/ $(Common.TestResultsDirectory)
+        ls -latr $(Common.TestResultsDirectory)
+        ls -latr $(Common.TestResultsDirectory)/logs
+        cat $(Common.TestResultsDirectory)/logs/neoload.log
+
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: $(Common.TestResultsDirectory)/neoload-slas.xml
+      failTaskOnFailedTests: true
