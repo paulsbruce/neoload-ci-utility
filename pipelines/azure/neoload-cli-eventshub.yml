@@ -1,7 +1,8 @@
 trigger: none
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'ubuntu-16.04'
+  #'windows-latest'
   #'ubuntu-16.04'
 
 variables:
