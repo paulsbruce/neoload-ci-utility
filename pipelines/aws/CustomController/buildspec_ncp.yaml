@@ -45,6 +45,9 @@ phases:
       - |
         neoload test-results --filter="status=RUNNING" ls
 
+      - |
+        neoload --debug status
+
       # sanity check (uses controller node only, checks License credentials, no NLW or NCP)
       - |
         /home/neoload/neoload/bin/NeoLoadCmd \
