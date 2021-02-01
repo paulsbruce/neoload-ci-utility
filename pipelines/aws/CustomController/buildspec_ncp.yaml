@@ -42,6 +42,9 @@ phases:
       - |
         neoload login --url $NLW_URL --workspace "Team A" $NLW_TOKEN
 
+      - |
+        neoload test-results --filter="status=RUNNING" ls
+
       # sanity check (uses controller node only, checks License credentials, no NLW or NCP)
       - |
         /home/neoload/neoload/bin/NeoLoadCmd \
