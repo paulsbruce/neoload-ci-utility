@@ -90,7 +90,7 @@ phases:
         done
 
         neoload test-results use $RESULTS_ID
-        neoload fastfail --max-failure 25 -c 'curl -X POST "http://localhost:7400/Runtime/v1/Service.svc/StopTest" -H "Content-type: application/json" --data \'{"d":{"ForceStop":true,"QualityStatus":"FAILED"}}\''
+        neoload fastfail --max-failure 25 -c $'curl -X POST "http://localhost:7400/Runtime/v1/Service.svc/StopTest" -H "Content-type: application/json" --data \'{"d":{"ForceStop":true,"QualityStatus":"FAILED"}}\''
 
       - |
         wait $PID
