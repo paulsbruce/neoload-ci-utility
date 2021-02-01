@@ -81,18 +81,7 @@ phases:
         PID=$!
 
       - |
-        RESULTS_ID=
-        ITER_C=0
-        while [ -z "$RESULTS_ID" ] && [ $ITER_C -le 100 ]; do
-          echo "Waiting for results to show up in NLW"
-          RESULTS_ID=$(neoload test-results --filter="status=RUNNING" ls | jq '[.[]|.id]|first' -r)
-          ITER_C=$((ITER_C+1))
-          sleep 15
-        done
-
-        echo "Using test-results $RESULTS_ID"
-        neoload test-results use $RESULTS_ID
-        neoload fastfail --max-failure 25 -c $'curl -X POST "http://localhost:7400/Runtime/v1/Service.svc/StopTest" -H "Content-type: application/json" --data \'{"d":{"ForceStop":true,"QualityStatus":"FAILED"}}\''
+        $PWD/pipelines/aws/CustomController/fastfail.sh
 
       - |
         wait $PID
