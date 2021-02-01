@@ -8,6 +8,7 @@ env:
     NCP_LG_SIZE: MEDIUM
     NCP_HRS_DURATION: 1
     NCP_LG_COUNT: 1
+    NLW_WORKSPACE: 5f329c43f6ecb40001d7b3e2
   secrets-manager: # as an example from CodeBuild, private token in environment from Secrets Manager
     NLW_URL: NLW_CREDENTIALS:NLW_URL
     NLW_TOKEN: NLW_CREDENTIALS:NLW_TOKEN
@@ -40,10 +41,10 @@ phases:
         cat /etc/hosts
 
       - |
-        neoload login --url $NLW_URL --workspace "Team A" $NLW_TOKEN
+        neoload login --url $NLW_URL --workspace "$NLW_WORKSPACE" $NLW_TOKEN
 
       - |
-        neoload test-results --filter="status=RUNNING" ls
+        neoload test-results --filter="status=TERMINATED" ls | jq '[.[]|.id]|first' -r
 
       - |
         neoload --debug status
@@ -78,6 +79,7 @@ phases:
           -nlweb \
           -nlwebAPIURL $NLW_URL \
           -nlwebToken $NLW_TOKEN \
+          -nlwebWorkspace "$NLW_WORKSPACE" \
           -NTS $NTS_URL \
           -NTSLogin $NTS_USER:$NTS_PASS \
           -leaseLicense $NTS_LICENSE_ID:51:1 \
