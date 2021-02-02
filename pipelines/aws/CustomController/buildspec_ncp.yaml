@@ -80,6 +80,7 @@ phases:
           -NTS $NTS_URL \
           -NTSLogin $NTS_USER:$NTS_PASS \
           -leaseLicense $NTS_LICENSE_ID:51:1 \
+          -loadGenerators $PWD/infra.yaml \
           -NCPLogin "$NCP_USER:$NCP_PASS" &
 
       - |
