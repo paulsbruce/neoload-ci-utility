@@ -93,6 +93,11 @@ phases:
 
       - |
         wait $PID
+        neoload wait cur
+                
+      - |
+        mkdir -p $CODEBUILD_SRC_DIR/neoload-report
+        neoload test-results --junit-file $CODEBUILD_SRC_DIR/neoload-report/neoload-slas.xml junitsla
 
 
   post_build:
