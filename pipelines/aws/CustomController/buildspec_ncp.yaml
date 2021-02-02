@@ -1,7 +1,7 @@
 version: 0.2
 
-# Uses paulsbruce/neoload-controller:aws-codebuild-7.4.0 which is built on
-# Dockerfile in this repo subdirectory (add git to neotys/neoload-controller:7.4.0)
+# Uses paulsbruce/neoload-controller:ctrl_ncli which is built on
+# Dockerfile in this repo subdirectory
 
 env:
   variables:
@@ -42,9 +42,6 @@ phases:
 
       - |
         neoload login --url $NLW_URL --workspace "$NLW_WORKSPACE" $NLW_TOKEN
-
-      - |
-        neoload test-results --filter="status=TERMINATED" ls | jq '[.[]|.id]|first' -r
 
       - |
         neoload --debug status
@@ -91,17 +88,16 @@ phases:
       - |
         $PWD/pipelines/aws/CustomController/fastfail.sh
 
+  post_build:
+    commands:
       - |
         wait $PID
         neoload wait cur
-                
+
       - |
         mkdir -p $CODEBUILD_SRC_DIR/neoload-report
         neoload test-results --junit-file $CODEBUILD_SRC_DIR/neoload-report/neoload-slas.xml junitsla
 
-
-  post_build:
-    commands:
       - cat $CODEBUILD_SRC_DIR/neoload-report/junit-sla-results.xml
       # if a prior step failed or err'd, don't bother waiting
       - bash -c "if [ /"$CODEBUILD_BUILD_SUCCEEDING/" == /"0/" ]; then exit 1; fi"
